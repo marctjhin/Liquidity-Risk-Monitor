@@ -26,6 +26,8 @@
     --amber-l:  rgba(178,92,0,.09);
     --red:      #b91c1c;
     --red-l:    rgba(185,28,28,.09);
+    --purple:   #6d28d9;
+    --purple-l: rgba(109,40,217,.08);
     --t1:       #0d7a4e;
     --t2:       #1d8a3e;
     --t3:       #b25c00;
@@ -77,10 +79,11 @@
   .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
   .kpi-card { background: var(--panel); border: 1px solid var(--border); border-radius: 7px; padding: 16px 18px; position: relative; overflow: hidden; }
   .kpi-card::after { content:''; position:absolute; top:0; left:0; bottom:0; width:3px; border-radius:7px 0 0 7px; }
-  .kpi-card.accent-blue::after  { background: var(--accent); }
-  .kpi-card.accent-green::after { background: var(--green); }
-  .kpi-card.accent-amber::after { background: var(--amber); }
-  .kpi-card.accent-red::after   { background: var(--red); }
+  .kpi-card.accent-blue::after   { background: var(--accent); }
+  .kpi-card.accent-green::after  { background: var(--green); }
+  .kpi-card.accent-amber::after  { background: var(--amber); }
+  .kpi-card.accent-red::after    { background: var(--red); }
+  .kpi-card.accent-purple::after { background: var(--purple); }
   .kpi-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: .11em; margin-bottom: 9px; text-transform: uppercase; }
   .kpi-value { font-family: var(--mono); font-size: 22px; font-weight: 600; line-height: 1; }
   .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 6px; font-weight: 300; }
@@ -94,6 +97,7 @@
 
   /* GRID LAYOUTS */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 
   /* TABLE */
   table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -129,6 +133,10 @@
   .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
   .btn-outline { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
   .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 5px 12px; font-size: 10px; }
+  .tab-btn { font-family: var(--mono); font-size: 10px; padding: 6px 14px; border-radius: 4px; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all .14s; letter-spacing: .04em; }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tab-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
 
   /* RANGE SLIDER */
   .range-wrap { display: flex; align-items: center; gap: 12px; }
@@ -148,9 +156,6 @@
   .log-danger { color: var(--red); }
   .log-msg    { color: var(--muted); }
   .log-msg.bright { color: var(--text); }
-
-  /* CHART CONTAINER */
-  .chart-wrap { position: relative; }
 
   /* QUEUE VISUALIZER */
   .queue-vis { display: flex; gap: 5px; flex-wrap: wrap; padding: 14px 0; min-height: 58px; align-items: center; }
@@ -182,13 +187,12 @@
 
   /* LCR GAUGE */
   .lcr-gauge-wrap { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; }
-  .lcr-gauge-svg { overflow: visible; }
   .lcr-gauge-value { font-family: var(--mono); font-size: 32px; font-weight: 600; text-anchor: middle; }
   .lcr-gauge-label { font-family: var(--mono); font-size: 10px; text-anchor: middle; letter-spacing: .08em; }
   .lcr-gauge-status { font-family: var(--mono); font-size: 11px; font-weight: 600; text-anchor: middle; letter-spacing: .06em; }
 
   /* LCR HQLA TABLE */
-  .hqla-row { display: grid; grid-template-columns: 28px 1fr 90px 90px 90px; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .hqla-row { display: grid; grid-template-columns: 40px 1fr 90px 90px 90px; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
   .hqla-row:last-child { border-bottom: none; }
   .hqla-header { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: .09em; }
 
@@ -205,8 +209,18 @@
   .lcr-comp-amt { font-family: var(--mono); font-size: 10px; color: var(--muted); width: 62px; text-align: right; flex-shrink: 0; }
   .lcr-comp-rate { font-family: var(--mono); font-size: 10px; width: 40px; text-align: right; flex-shrink: 0; }
 
-  /* LCR TREND CHART */
-  .lcr-threshold-line { stroke: var(--red); stroke-dasharray: 4 3; stroke-width: 1.5; }
+  /* FORECAST */
+  .forecast-tab-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+  .forecast-horizon-card { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .fhc-horizon { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+  .fhc-value { font-family: var(--mono); font-size: 18px; font-weight: 600; }
+  .fhc-sub { font-size: 11px; color: var(--muted); }
+  .forecast-signal-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .forecast-signal-row:last-child { border-bottom: none; }
+  .signal-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .signal-label { flex: 1; color: var(--muted); font-size: 12px; }
+  .signal-val { font-family: var(--mono); font-size: 11px; font-weight: 600; }
+  .confidence-bar-wrap { width: 60px; }
 
   /* ANIMATIONS */
   @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
@@ -242,6 +256,8 @@
     <div class="nav-item active" data-view="overview"><span class="nav-icon">◈</span> Overview</div>
     <div class="nav-item" data-view="portfolio"><span class="nav-icon">▤</span> Portfolio</div>
     <div class="nav-item" data-view="lcr"><span class="nav-icon">⬡</span> LCR Monitor</div>
+    <div class="nav-label">ANALYTICS</div>
+    <div class="nav-item" data-view="forecast"><span class="nav-icon">◎</span> Liq. Forecast</div>
     <div class="nav-label">SIMULATION</div>
     <div class="nav-item" data-view="simulate"><span class="nav-icon">▶</span> Liquidation Sim</div>
     <div class="nav-item" data-view="queue"><span class="nav-icon">⊞</span> Queue Viewer</div>
@@ -277,39 +293,29 @@
           <div class="kpi-sub" id="kpi-illiquid">— illiquid assets</div>
         </div>
       </div>
-
       <div class="grid-2">
         <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Tier Allocation</span>
-          </div>
+          <div class="panel-header"><span class="panel-title">Tier Allocation</span></div>
           <div class="panel-body" id="tier-alloc"></div>
         </div>
         <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Bid-Ask Spread — Normal vs Stressed</span>
-          </div>
+          <div class="panel-header"><span class="panel-title">Bid-Ask Spread — Normal vs Stressed</span></div>
           <div class="panel-body">
-            <div class="chart-wrap" style="height:196px"><canvas id="chart-spread"></canvas></div>
+            <div style="height:196px"><canvas id="chart-spread"></canvas></div>
           </div>
         </div>
       </div>
-
       <div class="grid-2">
         <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Notional by Asset Class</span>
-          </div>
+          <div class="panel-header"><span class="panel-title">Notional by Asset Class</span></div>
           <div class="panel-body">
-            <div class="chart-wrap" style="height:196px"><canvas id="chart-class"></canvas></div>
+            <div style="height:196px"><canvas id="chart-class"></canvas></div>
           </div>
         </div>
         <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Liquidation Cost Profile</span>
-          </div>
+          <div class="panel-header"><span class="panel-title">Liquidation Cost Profile</span></div>
           <div class="panel-body">
-            <div class="chart-wrap" style="height:196px"><canvas id="chart-cost"></canvas></div>
+            <div style="height:196px"><canvas id="chart-cost"></canvas></div>
           </div>
         </div>
       </div>
@@ -324,111 +330,19 @@
         </div>
         <div style="overflow-x:auto">
           <table>
-            <thead>
-              <tr>
-                <th>Asset ID</th><th>Name</th><th>Class</th><th>Tier</th>
-                <th>Notional</th><th>ADV</th><th>Bid-Ask</th>
-                <th>Liq Cost</th><th>Days</th><th>Status</th>
-              </tr>
-            </thead>
+            <thead><tr>
+              <th>Asset ID</th><th>Name</th><th>Class</th><th>Tier</th>
+              <th>Notional</th><th>ADV</th><th>Bid-Ask</th>
+              <th>Liq Cost</th><th>Days</th><th>Status</th>
+            </tr></thead>
             <tbody id="portfolio-tbody"></tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- ══════════ VIEW: SIMULATE ══════════ -->
-    <section class="view" id="view-simulate">
-
-      <div class="grid-2">
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">Simulation Parameters</span></div>
-          <div class="panel-body" style="display:flex;flex-direction:column;gap:18px">
-            <div>
-              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.1em;margin-bottom:10px;text-transform:uppercase">Redemption Target (% of Portfolio)</div>
-              <div class="range-wrap">
-                <input type="range" id="target-range" min="5" max="100" step="5" value="30"/>
-                <span class="range-val"><span id="target-pct">30</span>%</span>
-              </div>
-              <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px">≈ <span id="target-amt">—</span></div>
-            </div>
-            <div style="display:flex;gap:10px">
-              <button class="btn btn-primary" id="btn-run">▶ RUN SIMULATION</button>
-              <button class="btn btn-outline" id="btn-reset">↺ RESET</button>
-            </div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">Queue Algorithm</span></div>
-          <div class="panel-body">
-            <div class="algo-step"><span class="algo-num">01</span><span>Sort AssetArray by tier (T1→T4), then by ADV descending</span></div>
-            <div class="algo-step"><span class="algo-num">02</span><span>Enqueue all assets into LiquidationQueue (FIFO)</span></div>
-            <div class="algo-step"><span class="algo-num">03</span><span>While target &gt; 0 and queue is not empty: dequeue()</span></div>
-            <div class="algo-step"><span class="algo-num">04</span><span>Compute liquidation fee for each dequeued asset</span></div>
-            <div class="algo-step"><span class="algo-num">05</span><span>Push sold asset into results Array and log the event</span></div>
-            <div class="algo-step"><span class="algo-num">06</span><span>Report shortfall if queue exhausted before target met</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div id="sim-results" style="display:none;flex-direction:column;gap:16px">
-        <div class="kpi-grid">
-          <div class="kpi-card accent-blue"><div class="kpi-label">Assets Dequeued</div><div class="kpi-value" id="res-count" style="color:var(--accent)">—</div></div>
-          <div class="kpi-card accent-amber"><div class="kpi-label">Total Liq Fees</div><div class="kpi-value" id="res-fees" style="color:var(--amber)">—</div></div>
-          <div class="kpi-card accent-red"><div class="kpi-label">Days to Complete</div><div class="kpi-value" id="res-days" style="color:var(--red)">—</div></div>
-          <div class="kpi-card" id="res-shortfall-card"><div class="kpi-label">Shortfall</div><div class="kpi-value" id="res-shortfall">—</div></div>
-        </div>
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Liquidation Waterfall — Results Array</span>
-          </div>
-          <div class="panel-body">
-            <div class="wf-row wf-header">
-              <span>#</span><span>Asset</span><span>Name</span><span>Sell Amt</span><span>Liq Fee</span><span>Tier</span>
-            </div>
-            <div id="waterfall-rows"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══════════ VIEW: QUEUE VIEWER ══════════ -->
-    <section class="view" id="view-queue">
-      <div class="panel">
-        <div class="panel-header">
-          <span class="panel-title">Liquidation Queue — FIFO Order</span>
-          <span class="panel-badge" style="background:var(--accent-l);color:var(--accent)" id="queue-size-badge">SIZE: 0</span>
-        </div>
-        <div class="panel-body">
-          <div style="display:flex;gap:16px;margin-bottom:8px;font-family:var(--mono);font-size:10px;color:var(--dim)">
-            <span>← FRONT (dequeue)</span>
-            <span style="flex:1;text-align:right">BACK (enqueue) →</span>
-          </div>
-          <div class="queue-vis" id="queue-vis">
-            <span style="color:var(--dim);font-family:var(--mono);font-size:11px">Queue empty — run simulation to populate</span>
-          </div>
-          <div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-            <div class="queue-stat">
-              <div class="queue-stat-label">Queue Size</div>
-              <div class="queue-stat-val" id="q-size" style="color:var(--accent)">0</div>
-            </div>
-            <div class="queue-stat">
-              <div class="queue-stat-label">Peek (Front)</div>
-              <div class="queue-stat-val" id="q-peek" style="color:var(--green)">—</div>
-            </div>
-            <div class="queue-stat">
-              <div class="queue-stat-label">Total Dequeued</div>
-              <div class="queue-stat-val" id="q-dequeued" style="color:var(--amber)">0</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ══════════ VIEW: LCR ══════════ -->
     <section class="view" id="view-lcr">
-
-      <!-- KPI row -->
       <div class="kpi-grid">
         <div class="kpi-card accent-blue anim anim-delay-1">
           <div class="kpi-label">LCR Ratio</div>
@@ -452,7 +366,6 @@
         </div>
       </div>
 
-      <!-- Gauge + Outflow Inputs -->
       <div class="grid-2">
         <div class="panel">
           <div class="panel-header">
@@ -461,19 +374,15 @@
           </div>
           <div class="panel-body">
             <div class="lcr-gauge-wrap">
-              <svg class="lcr-gauge-svg" width="260" height="150" viewBox="0 0 260 150">
-                <!-- track arc -->
+              <svg width="260" height="150" viewBox="0 0 260 150" style="overflow:visible">
                 <path id="lcr-arc-track" d="" fill="none" stroke="#e2e5ea" stroke-width="16" stroke-linecap="round"/>
-                <!-- fill arc -->
                 <path id="lcr-arc-fill"  d="" fill="none" stroke="#1d4ed8" stroke-width="16" stroke-linecap="round"/>
-                <!-- 100% threshold tick -->
                 <line id="lcr-tick-100" x1="0" y1="0" x2="0" y2="0" stroke="#b91c1c" stroke-width="2.5" stroke-linecap="round"/>
-                <!-- labels -->
                 <text x="24"  y="148" font-family="IBM Plex Mono" font-size="9" fill="#b0b8c5">0%</text>
-                <text x="224" y="148" font-family="IBM Plex Mono" font-size="9" fill="#b0b8c5">200%</text>
-                <text x="122" y="28"  font-family="IBM Plex Mono" font-size="9" fill="#b91c1c" text-anchor="middle">100%</text>
-                <text class="lcr-gauge-value" id="lcr-gauge-val"    x="130" y="112" fill="#1c2330">—</text>
-                <text class="lcr-gauge-status" id="lcr-gauge-status" x="130" y="132" fill="#6b7585">—</text>
+                <text x="222" y="148" font-family="IBM Plex Mono" font-size="9" fill="#b0b8c5">200%</text>
+                <text x="130" y="28"  font-family="IBM Plex Mono" font-size="9" fill="#b91c1c" text-anchor="middle">100%</text>
+                <text id="lcr-gauge-val"    x="130" y="112" font-family="IBM Plex Mono" font-size="32" font-weight="600" text-anchor="middle" fill="#1c2330">—</text>
+                <text id="lcr-gauge-status" x="130" y="132" font-family="IBM Plex Mono" font-size="11" font-weight="600" text-anchor="middle" fill="#6b7585" letter-spacing="2">—</text>
               </svg>
             </div>
             <div style="display:flex;justify-content:center;gap:20px;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px">
@@ -512,14 +421,13 @@
               </div>
             </div>
             <div style="font-family:var(--mono);font-size:10px;color:var(--dim);line-height:1.7;border-top:1px solid var(--border);padding-top:10px">
-              Basel III run-off rates applied: retail 5% · wholesale 25% · secured 15% · other 100%<br>
-              Net outflow = max(gross outflow − inflows, 25% gross outflow)
+              Basel III run-off rates: retail 5% · wholesale 25% · secured 15% · other 100%<br>
+              Net outflow = max(gross − inflows, 25% × gross outflow)
             </div>
           </div>
         </div>
       </div>
 
-      <!-- HQLA Breakdown + Component Bars -->
       <div class="grid-2">
         <div class="panel">
           <div class="panel-header">
@@ -529,25 +437,172 @@
           <div class="panel-body" style="padding:0">
             <div style="padding:12px 16px 0">
               <div class="hqla-row hqla-header">
-                <span>T</span><span>Asset</span><span style="text-align:right">Notional</span><span style="text-align:right">Haircut</span><span style="text-align:right">HQLA Value</span>
+                <span>Level</span><span>Asset</span><span style="text-align:right">Notional</span><span style="text-align:right">Haircut</span><span style="text-align:right">HQLA Value</span>
               </div>
             </div>
-            <div id="lcr-hqla-rows" style="padding:0 16px 12px;max-height:280px;overflow-y:auto"></div>
+            <div id="lcr-hqla-rows" style="padding:0 16px 12px;max-height:260px;overflow-y:auto"></div>
           </div>
         </div>
-
         <div class="panel">
           <div class="panel-header"><span class="panel-title">Outflow Component Breakdown</span></div>
           <div class="panel-body" id="lcr-outflow-bars"></div>
-          <div class="panel-header" style="border-top:1px solid var(--border);border-bottom:none;margin-top:4px">
-            <span class="panel-title">30-Day LCR Trend</span>
+          <div style="border-top:1px solid var(--border)">
+            <div class="panel-header"><span class="panel-title">30-Day LCR History</span></div>
+            <div class="panel-body">
+              <div style="height:130px"><canvas id="chart-lcr-trend"></canvas></div>
+            </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ VIEW: FORECAST ══════════ -->
+    <section class="view" id="view-forecast">
+
+      <!-- Horizon tabs + run -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div class="forecast-tab-bar">
+          <button class="tab-btn active" data-horizon="30"  id="tab-30">30-Day</button>
+          <button class="tab-btn"        data-horizon="90"  id="tab-90">90-Day</button>
+          <button class="tab-btn"        data-horizon="365" id="tab-365">1-Year</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">Method:</div>
+          <select id="fc-method" style="font-family:var(--mono);font-size:10px;background:var(--bg);border:1px solid var(--border2);border-radius:4px;padding:5px 8px;color:var(--text);outline:none;">
+            <option value="linear">Linear Trend</option>
+            <option value="exponential">Exp. Smoothing</option>
+            <option value="seasonal">Seasonal (Weekly)</option>
+          </select>
+          <button class="btn btn-primary btn-sm" id="fc-btn-run">▶ RUN FORECAST</button>
+        </div>
+      </div>
+
+      <!-- Horizon summary cards -->
+      <div class="grid-3" id="fc-horizon-cards">
+        <div class="forecast-horizon-card">
+          <div class="fhc-horizon">30-Day Forecast</div>
+          <div class="fhc-value" id="fc-val-30" style="color:var(--accent)">—</div>
+          <div class="fhc-sub" id="fc-sub-30">Run forecast to populate</div>
+        </div>
+        <div class="forecast-horizon-card">
+          <div class="fhc-horizon">90-Day Forecast</div>
+          <div class="fhc-value" id="fc-val-90" style="color:var(--accent)">—</div>
+          <div class="fhc-sub" id="fc-sub-90">Run forecast to populate</div>
+        </div>
+        <div class="forecast-horizon-card">
+          <div class="fhc-horizon">1-Year Forecast</div>
+          <div class="fhc-value" id="fc-val-365" style="color:var(--accent)">—</div>
+          <div class="fhc-sub" id="fc-sub-365">Run forecast to populate</div>
+        </div>
+      </div>
+
+      <!-- Main forecast chart -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Liquidity Forecast — <span id="fc-chart-title">Select horizon</span></span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--muted)">
+              <span style="width:10px;height:2px;background:#1d4ed8;display:inline-block;border-radius:1px"></span>Historical
+            </span>
+            <span style="display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--muted)">
+              <span style="width:10px;height:2px;background:#6d28d9;display:inline-block;border-radius:1px;border-top:2px dashed #6d28d9"></span>Forecast
+            </span>
+            <span style="display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--muted)">
+              <span style="width:10px;height:6px;background:rgba(109,40,217,.12);display:inline-block;border-radius:1px"></span>Confidence Band
+            </span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div style="height:260px"><canvas id="chart-forecast"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Signals + Stats grid -->
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Forecast Signals</span></div>
+          <div class="panel-body" id="fc-signals"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Cash Flow Statistics</span></div>
           <div class="panel-body">
-            <div class="chart-wrap" style="height:140px"><canvas id="chart-lcr-trend"></canvas></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="fc-stats"></div>
           </div>
         </div>
       </div>
 
+    </section>
+
+    <!-- ══════════ VIEW: SIMULATE ══════════ -->
+    <section class="view" id="view-simulate">
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Simulation Parameters</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:18px">
+            <div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.1em;margin-bottom:10px;text-transform:uppercase">Redemption Target (% of Portfolio)</div>
+              <div class="range-wrap">
+                <input type="range" id="target-range" min="5" max="100" step="5" value="30"/>
+                <span class="range-val"><span id="target-pct">30</span>%</span>
+              </div>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px">≈ <span id="target-amt">—</span></div>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-primary" id="btn-run">▶ RUN SIMULATION</button>
+              <button class="btn btn-outline" id="btn-reset">↺ RESET</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Queue Algorithm</span></div>
+          <div class="panel-body">
+            <div class="algo-step"><span class="algo-num">01</span><span>Sort AssetArray by tier (T1→T4), then by ADV descending</span></div>
+            <div class="algo-step"><span class="algo-num">02</span><span>Enqueue all assets into LiquidationQueue (FIFO)</span></div>
+            <div class="algo-step"><span class="algo-num">03</span><span>While target &gt; 0 and queue is not empty: dequeue()</span></div>
+            <div class="algo-step"><span class="algo-num">04</span><span>Compute liquidation fee for each dequeued asset</span></div>
+            <div class="algo-step"><span class="algo-num">05</span><span>Push sold asset into results Array and log the event</span></div>
+            <div class="algo-step"><span class="algo-num">06</span><span>Report shortfall if queue exhausted before target met</span></div>
+          </div>
+        </div>
+      </div>
+      <div id="sim-results" style="display:none;flex-direction:column;gap:16px">
+        <div class="kpi-grid">
+          <div class="kpi-card accent-blue"><div class="kpi-label">Assets Dequeued</div><div class="kpi-value" id="res-count" style="color:var(--accent)">—</div></div>
+          <div class="kpi-card accent-amber"><div class="kpi-label">Total Liq Fees</div><div class="kpi-value" id="res-fees" style="color:var(--amber)">—</div></div>
+          <div class="kpi-card accent-red"><div class="kpi-label">Days to Complete</div><div class="kpi-value" id="res-days" style="color:var(--red)">—</div></div>
+          <div class="kpi-card" id="res-shortfall-card"><div class="kpi-label">Shortfall</div><div class="kpi-value" id="res-shortfall">—</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Liquidation Waterfall — Results Array</span></div>
+          <div class="panel-body">
+            <div class="wf-row wf-header"><span>#</span><span>Asset</span><span>Name</span><span>Sell Amt</span><span>Liq Fee</span><span>Tier</span></div>
+            <div id="waterfall-rows"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ VIEW: QUEUE VIEWER ══════════ -->
+    <section class="view" id="view-queue">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Liquidation Queue — FIFO Order</span>
+          <span class="panel-badge" style="background:var(--accent-l);color:var(--accent)" id="queue-size-badge">SIZE: 0</span>
+        </div>
+        <div class="panel-body">
+          <div style="display:flex;gap:16px;margin-bottom:8px;font-family:var(--mono);font-size:10px;color:var(--dim)">
+            <span>← FRONT (dequeue)</span><span style="flex:1;text-align:right">BACK (enqueue) →</span>
+          </div>
+          <div class="queue-vis" id="queue-vis">
+            <span style="color:var(--dim);font-family:var(--mono);font-size:11px">Queue empty — run simulation to populate</span>
+          </div>
+          <div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <div class="queue-stat"><div class="queue-stat-label">Queue Size</div><div class="queue-stat-val" id="q-size" style="color:var(--accent)">0</div></div>
+            <div class="queue-stat"><div class="queue-stat-label">Peek (Front)</div><div class="queue-stat-val" id="q-peek" style="color:var(--green)">—</div></div>
+            <div class="queue-stat"><div class="queue-stat-label">Total Dequeued</div><div class="queue-stat-val" id="q-dequeued" style="color:var(--amber)">0</div></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ══════════ VIEW: LOG ══════════ -->
@@ -562,7 +617,7 @@
         </div>
         <div class="panel-body">
           <div class="log-container" id="log-container">
-            <div style="color:var(--dim);font-family:var(--mono);font-size:11px;padding:8px 0">No events yet. Run the simulation to generate log entries.</div>
+            <div style="color:var(--dim);font-family:var(--mono);font-size:11px;padding:8px 0">No events yet. Run the simulation.</div>
           </div>
         </div>
       </div>
@@ -576,10 +631,6 @@
 //  OOP DATA STRUCTURES
 // ═══════════════════════════════════════════════════════════
 
-/**
- * Asset — represents a single portfolio position.
- * OOP: encapsulates all asset data and computed financial methods.
- */
 class Asset {
   constructor({ id, name, assetClass, tier, notional, adv, bidAsk, stressedBidAsk }) {
     this.id             = id;
@@ -591,21 +642,12 @@ class Asset {
     this.bidAsk         = bidAsk;
     this.stressedBidAsk = stressedBidAsk;
   }
-
-  effectiveSpread(stressed) {
-    return stressed ? this.stressedBidAsk : this.bidAsk;
-  }
-
-  liquidationCost(stressed) {
-    return this.notional * this.effectiveSpread(stressed) * 0.5;
-  }
-
+  effectiveSpread(stressed) { return stressed ? this.stressedBidAsk : this.bidAsk; }
+  liquidationCost(stressed) { return this.notional * this.effectiveSpread(stressed) * 0.5; }
   daysToLiquidate(stressed) {
     if (this.adv === 0) return Infinity;
-    const impactMult = stressed ? 3.5 : 1;
-    return (this.notional / this.adv) * impactMult;
+    return (this.notional / this.adv) * (stressed ? 3.5 : 1);
   }
-
   riskStatus(stressed) {
     const d = this.daysToLiquidate(stressed);
     if (d === Infinity || d > 10) return 'breach';
@@ -614,221 +656,43 @@ class Asset {
   }
 }
 
-/**
- * AssetArray — OOP wrapper around a plain JS Array.
- * Exposes domain-specific methods over the underlying array data structure.
- */
 class AssetArray {
-  constructor() {
-    this._items = []; // Array data structure
-  }
-
-  add(asset) {
-    this._items.push(asset);
-  }
-
-  getAll() {
-    return [...this._items];
-  }
-
-  getByTier(tier) {
-    return this._items.filter(a => a.tier === tier);
-  }
-
+  constructor() { this._items = []; }
+  add(asset)       { this._items.push(asset); }
+  getAll()         { return [...this._items]; }
+  getByTier(tier)  { return this._items.filter(a => a.tier === tier); }
   sortByTierAndADV() {
-    return [...this._items].sort((a, b) =>
-      a.tier !== b.tier ? a.tier - b.tier : b.adv - a.adv
-    );
+    return [...this._items].sort((a,b) => a.tier !== b.tier ? a.tier-b.tier : b.adv-a.adv);
   }
-
-  totalNotional() {
-    return this._items.reduce((sum, a) => sum + a.notional, 0);
+  totalNotional()       { return this._items.reduce((s,a)=>s+a.notional,0); }
+  totalLiqCost(stressed){ return this._items.reduce((s,a)=>s+a.liquidationCost(stressed),0); }
+  avgDaysToLiq(stressed){
+    const f = this._items.filter(a=>a.daysToLiquidate(stressed)<Infinity);
+    return f.length ? f.reduce((s,a)=>s+a.daysToLiquidate(stressed),0)/f.length : Infinity;
   }
-
-  totalLiqCost(stressed) {
-    return this._items.reduce((sum, a) => sum + a.liquidationCost(stressed), 0);
-  }
-
-  avgDaysToLiq(stressed) {
-    const finite = this._items.filter(a => a.daysToLiquidate(stressed) < Infinity);
-    if (!finite.length) return Infinity;
-    return finite.reduce((sum, a) => sum + a.daysToLiquidate(stressed), 0) / finite.length;
-  }
-
   get length() { return this._items.length; }
 }
 
-/**
- * LiquidationQueue — FIFO Queue backed by an Array.
- * OOP: encapsulates queue operations with clear method contracts.
- */
 class LiquidationQueue {
-  constructor() {
-    this._data     = []; // Backing Array
-    this._dequeued = 0;
-  }
-
-  enqueue(asset) {
-    this._data.push(asset); // Add to back
-  }
-
-  dequeue() {
-    if (this.isEmpty) return null;
-    this._dequeued++;
-    return this._data.shift(); // Remove from front (FIFO)
-  }
-
-  peek() {
-    return this._data[0] ?? null;
-  }
-
-  toArray() {
-    return [...this._data];
-  }
-
-  clear() {
-    this._data     = [];
-    this._dequeued = 0;
-  }
-
+  constructor() { this._data=[]; this._dequeued=0; }
+  enqueue(asset)   { this._data.push(asset); }
+  dequeue()        { if(this.isEmpty) return null; this._dequeued++; return this._data.shift(); }
+  peek()           { return this._data[0]??null; }
+  toArray()        { return [...this._data]; }
+  clear()          { this._data=[]; this._dequeued=0; }
   get size()         { return this._data.length; }
-  get isEmpty()      { return this._data.length === 0; }
+  get isEmpty()      { return this._data.length===0; }
   get totalDequeued(){ return this._dequeued; }
 }
 
-/**
- * EventLog — Array-backed log of system events.
- */
 class EventLog {
-  constructor() {
-    this._entries = []; // Array data structure
-  }
-
-  push(type, message) {
-    this._entries.push({ type, message, ts: new Date() });
-  }
-
-  clear() {
-    this._entries = [];
-  }
-
-  toArray() {
-    return [...this._entries];
-  }
-
-  get count() { return this._entries.length; }
+  constructor() { this._entries=[]; }
+  push(type,message){ this._entries.push({type,message,ts:new Date()}); }
+  clear()           { this._entries=[]; }
+  toArray()         { return [...this._entries]; }
+  get count()       { return this._entries.length; }
 }
 
-/**
- * LCREngine — Basel III Liquidity Coverage Ratio calculator.
- * OOP: encapsulates HQLA computation, haircut tables, and outflow modelling.
- * Uses an internal Array to store HQLA line items and history snapshots.
- */
-class LCREngine {
-  constructor() {
-    // HQLA haircut schedule per Basel III (% retained after haircut)
-    this.HAIRCUT = {
-      1: 1.00,  // Level 1 — 0% haircut (T1 assets)
-      2: 0.85,  // Level 2A — 15% haircut (T2 assets)
-      3: 0.50,  // Level 2B — 50% haircut (T3 assets, partial)
-      4: 0.00,  // Ineligible (T4)
-    };
-
-    // Basel III run-off rates
-    this.RUNOFF = {
-      retail:    0.05,
-      wholesale: 0.25,
-      secured:   0.15,
-      other:     1.00,
-    };
-
-    this._hqlaItems  = []; // Array of HQLA eligible line items
-    this._history    = []; // Array of historical LCR snapshots (last 30 days)
-    this._lastResult = null;
-  }
-
-  /** Compute HQLA value for a given asset */
-  hqlaValue(asset) {
-    const haircut = this.HAIRCUT[asset.tier];
-    return asset.notional * haircut;
-  }
-
-  /** True if asset is HQLA-eligible */
-  isHQLAEligible(asset) {
-    return asset.tier <= 3;
-  }
-
-  /**
-   * Compute LCR given portfolio and outflow assumptions.
-   * Results stored in internal Arrays for display and history.
-   */
-  compute(assetArray, params) {
-    const { retail, wholesale, secured, other, inflows } = params;
-
-    // Build HQLA items Array from eligible assets
-    this._hqlaItems = [];
-    assetArray.getAll().forEach(a => {
-      if (!this.isHQLAEligible(a)) return;
-      const haircut   = 1 - this.HAIRCUT[a.tier];
-      const hqlaVal   = this.hqlaValue(a);
-      this._hqlaItems.push({ asset: a, haircut, hqlaVal });
-    });
-
-    // Sum HQLA by level
-    const hqlaL1  = this._hqlaItems.filter(i => i.asset.tier === 1).reduce((s, i) => s + i.hqlaVal, 0);
-    const hqlaL2A = this._hqlaItems.filter(i => i.asset.tier === 2).reduce((s, i) => s + i.hqlaVal, 0);
-    const hqlaL2B = this._hqlaItems.filter(i => i.asset.tier === 3).reduce((s, i) => s + i.hqlaVal, 0);
-
-    // Basel III caps: L2 assets ≤ 40% of HQLA; L2B ≤ 15%
-    const totalRaw   = hqlaL1 + hqlaL2A + hqlaL2B;
-    const capL2      = Math.min(hqlaL2A + hqlaL2B, 0.40 * totalRaw);
-    const capL2B     = Math.min(hqlaL2B, 0.15 * totalRaw);
-    const totalHQLA  = hqlaL1 + Math.min(hqlaL2A, capL2 - capL2B) + capL2B;
-
-    // Gross outflows
-    const grossRetail    = retail    * this.RUNOFF.retail;
-    const grossWholesale = wholesale * this.RUNOFF.wholesale;
-    const grossSecured   = secured   * this.RUNOFF.secured;
-    const grossOther     = other     * this.RUNOFF.other;
-    const grossOutflows  = grossRetail + grossWholesale + grossSecured + grossOther;
-
-    // Net cash outflows = max(gross − inflows, 25% of gross)
-    const nco = Math.max(grossOutflows - inflows, 0.25 * grossOutflows);
-
-    const ratio    = nco > 0 ? (totalHQLA / nco) * 100 : Infinity;
-    const surplus  = totalHQLA - nco;
-    const compliant = ratio >= 100;
-
-    const result = {
-      ratio, totalHQLA, nco, surplus, compliant,
-      hqlaL1, hqlaL2A, hqlaL2B,
-      grossOutflows, inflows,
-      components: [
-        { label: 'Retail Run-off',    gross: retail,    outflow: grossRetail,    rate: this.RUNOFF.retail },
-        { label: 'Wholesale Run-off', gross: wholesale, outflow: grossWholesale, rate: this.RUNOFF.wholesale },
-        { label: 'Secured Funding',   gross: secured,   outflow: grossSecured,   rate: this.RUNOFF.secured },
-        { label: 'Derivatives/Other', gross: other,     outflow: grossOther,     rate: this.RUNOFF.other },
-      ],
-      items: [...this._hqlaItems],
-      timestamp: new Date(),
-    };
-
-    // Push snapshot to history Array
-    this._history.push({ ratio, totalHQLA, nco, ts: result.timestamp });
-    if (this._history.length > 30) this._history.shift();
-
-    this._lastResult = result;
-    return result;
-  }
-
-  getHistory() { return [...this._history]; }
-  getItems()   { return [...this._hqlaItems]; }
-  get lastResult() { return this._lastResult; }
-}
-
-
- * OOP: owns the portfolio, queue, and log; exposes domain methods.
- */
 class LiquidityRiskEngine {
   constructor(assetArray) {
     this.portfolio  = assetArray;
@@ -837,227 +701,718 @@ class LiquidityRiskEngine {
     this.stressed   = false;
     this.lastResult = null;
   }
-
   setStress(stressed) {
     this.stressed = stressed;
-    this.log.push('info', `Market regime → ${stressed ? 'STRESS' : 'NORMAL'}`);
+    this.log.push('info',`Market regime → ${stressed?'STRESS':'NORMAL'}`);
   }
-
   simulate(targetPct) {
     const totalAUM = this.portfolio.totalNotional();
-    const target   = totalAUM * (targetPct / 100);
-    const sold     = []; // Results Array
-
+    const target   = totalAUM*(targetPct/100);
+    const sold     = [];
     this.queue.clear();
-    const sorted = this.portfolio.sortByTierAndADV();
-    sorted.forEach(a => this.queue.enqueue(a));
-
-    this.log.push('info', `Simulation started — target: ${fmt(target)} (${targetPct}%)`);
-    this.log.push('info', `Queue loaded: ${this.queue.size} assets enqueued in tier order`);
-
-    let remaining = target;
-    let totalFees = 0;
-    let maxDays   = 0;
-
-    while (!this.queue.isEmpty && remaining > 0) {
-      const asset   = this.queue.dequeue();
-      const sellAmt = Math.min(asset.notional, remaining);
-      const sellPct = sellAmt / asset.notional;
-      const fee     = sellAmt * asset.effectiveSpread(this.stressed) * 0.5;
-      const days    = asset.daysToLiquidate(this.stressed);
-
-      totalFees += fee;
-      if (days !== Infinity) maxDays = Math.max(maxDays, days * sellPct);
-      remaining -= sellAmt;
-
-      sold.push({ asset, sellAmt, fee, days });
-
-      const level = asset.tier <= 2 ? 'ok' : asset.tier === 3 ? 'warn' : 'danger';
-      this.log.push(level,
-        `DEQUEUE [${asset.id}] T${asset.tier} — sold ${fmt(sellAmt)}, spread ${fmtPct(asset.effectiveSpread(this.stressed))}, fee ${fmt(fee)}`
-      );
+    this.portfolio.sortByTierAndADV().forEach(a=>this.queue.enqueue(a));
+    this.log.push('info',`Simulation started — target: ${fmt(target)} (${targetPct}%)`);
+    this.log.push('info',`Queue loaded: ${this.queue.size} assets enqueued`);
+    let remaining=target, totalFees=0, maxDays=0;
+    while(!this.queue.isEmpty && remaining>0) {
+      const asset=this.queue.dequeue();
+      const sellAmt=Math.min(asset.notional,remaining);
+      const fee=sellAmt*asset.effectiveSpread(this.stressed)*0.5;
+      const days=asset.daysToLiquidate(this.stressed);
+      totalFees+=fee;
+      if(days!==Infinity) maxDays=Math.max(maxDays,days*(sellAmt/asset.notional));
+      remaining-=sellAmt;
+      sold.push({asset,sellAmt,fee,days});
+      const level=asset.tier<=2?'ok':asset.tier===3?'warn':'danger';
+      this.log.push(level,`DEQUEUE [${asset.id}] T${asset.tier} — sold ${fmt(sellAmt)}, fee ${fmt(fee)}`);
     }
-
-    const shortfall = Math.max(0, remaining);
-    if (shortfall > 0) {
-      this.log.push('danger', `⚠ SHORTFALL: ${fmt(shortfall)} — queue exhausted before target met`);
-    } else {
-      this.log.push('ok', `✓ TARGET MET — ${sold.length} assets liquidated, total fees: ${fmt(totalFees)}`);
-    }
-
-    this.lastResult = { sold, totalFees, maxDays, shortfall, target };
+    const shortfall=Math.max(0,remaining);
+    if(shortfall>0) this.log.push('danger',`⚠ SHORTFALL: ${fmt(shortfall)}`);
+    else            this.log.push('ok',`✓ TARGET MET — ${sold.length} assets, fees: ${fmt(totalFees)}`);
+    this.lastResult={sold,totalFees,maxDays,shortfall,target};
     return this.lastResult;
   }
+}
+
+// ── LCR ENGINE ───────────────────────────────────────────────
+class LCREngine {
+  constructor() {
+    this.HAIRCUT  = { 1:1.00, 2:0.85, 3:0.50, 4:0.00 };
+    this.RUNOFF   = { retail:0.05, wholesale:0.25, secured:0.15, other:1.00 };
+    this._hqlaItems = [];
+    this._history   = []; // Array of LCR history snapshots
+    this._lastResult = null;
+  }
+  hqlaValue(asset)       { return asset.notional * this.HAIRCUT[asset.tier]; }
+  isHQLAEligible(asset)  { return asset.tier <= 3; }
+
+  compute(assetArray, params) {
+    const {retail,wholesale,secured,other,inflows} = params;
+    this._hqlaItems = [];
+    assetArray.getAll().forEach(a => {
+      if (!this.isHQLAEligible(a)) return;
+      const haircut = 1 - this.HAIRCUT[a.tier];
+      const hqlaVal = this.hqlaValue(a);
+      this._hqlaItems.push({asset:a, haircut, hqlaVal});
+    });
+    const hqlaL1  = this._hqlaItems.filter(i=>i.asset.tier===1).reduce((s,i)=>s+i.hqlaVal,0);
+    const hqlaL2A = this._hqlaItems.filter(i=>i.asset.tier===2).reduce((s,i)=>s+i.hqlaVal,0);
+    const hqlaL2B = this._hqlaItems.filter(i=>i.asset.tier===3).reduce((s,i)=>s+i.hqlaVal,0);
+    const totalRaw  = hqlaL1+hqlaL2A+hqlaL2B;
+    const capL2B    = Math.min(hqlaL2B, 0.15*totalRaw);
+    const capL2     = Math.min(hqlaL2A+capL2B, 0.40*totalRaw);
+    const totalHQLA = hqlaL1 + capL2;
+
+    const grossRetail    = retail    * this.RUNOFF.retail;
+    const grossWholesale = wholesale * this.RUNOFF.wholesale;
+    const grossSecured   = secured   * this.RUNOFF.secured;
+    const grossOther     = other     * this.RUNOFF.other;
+    const grossOutflows  = grossRetail+grossWholesale+grossSecured+grossOther;
+    const nco = Math.max(grossOutflows - inflows, 0.25*grossOutflows);
+    const ratio   = nco>0 ? (totalHQLA/nco)*100 : Infinity;
+    const surplus = totalHQLA - nco;
+
+    const result = {
+      ratio, totalHQLA, nco, surplus, hqlaL1, hqlaL2A, hqlaL2B,
+      grossOutflows, inflows, compliant: ratio>=100,
+      components: [
+        {label:'Retail Run-off',    gross:retail,    outflow:grossRetail,    rate:this.RUNOFF.retail},
+        {label:'Wholesale Run-off', gross:wholesale, outflow:grossWholesale, rate:this.RUNOFF.wholesale},
+        {label:'Secured Funding',   gross:secured,   outflow:grossSecured,   rate:this.RUNOFF.secured},
+        {label:'Derivatives/Other', gross:other,     outflow:grossOther,     rate:this.RUNOFF.other},
+      ],
+      items: [...this._hqlaItems],
+      timestamp: new Date(),
+    };
+    this._history.push({ratio, totalHQLA, nco, nco_raw: grossOutflows - inflows, ts: result.timestamp});
+    if (this._history.length > 90) this._history.shift();
+    this._lastResult = result;
+    return result;
+  }
+  getHistory()  { return [...this._history]; }
+  get lastResult() { return this._lastResult; }
+}
+
+// ── LIQUIDITY FORECAST ENGINE ─────────────────────────────────
+/**
+ * LiquidityForecastEngine — predicts future liquidity from historical cash-flow data.
+ * OOP: owns the historical series Array and exposes forecast methods.
+ * Supports linear trend, exponential smoothing, and seasonal models.
+ */
+class LiquidityForecastEngine {
+  constructor() {
+    this._cashFlows = []; // Array of {date, inflow, outflow, net, hqla, lcr} observations
+    this._lastForecast = null;
+  }
+
+  /** Add a daily observation to the historical Array */
+  addObservation(obs) {
+    this._cashFlows.push(obs);
+  }
+
+  getHistory() { return [...this._cashFlows]; }
+
+  /** Simple moving average over last `window` points */
+  _movingAvg(series, window) {
+    if (series.length < window) window = series.length;
+    const slice = series.slice(-window);
+    return slice.reduce((s,v)=>s+v,0) / slice.length;
+  }
+
+  /** Linear regression — returns {slope, intercept} */
+  _linReg(ys) {
+    const n = ys.length;
+    if (n < 2) return { slope: 0, intercept: ys[0] || 0 };
+    const xs = ys.map((_,i)=>i);
+    const mx = xs.reduce((s,v)=>s+v,0)/n;
+    const my = ys.reduce((s,v)=>s+v,0)/n;
+    const num = xs.reduce((s,x,i)=>s+(x-mx)*(ys[i]-my),0);
+    const den = xs.reduce((s,x)=>s+(x-mx)**2,0);
+    const slope = den ? num/den : 0;
+    return { slope, intercept: my - slope*mx };
+  }
+
+  /** Exponential smoothing (Holt's double) — returns {level, trend} */
+  _holtSmooth(ys, alpha=0.3, beta=0.1) {
+    if (ys.length===0) return {level:0, trend:0};
+    let L = ys[0], T = ys.length>1 ? ys[1]-ys[0] : 0;
+    for (let i=1; i<ys.length; i++) {
+      const Lp=L; L=alpha*ys[i]+(1-alpha)*(L+T); T=beta*(L-Lp)+(1-beta)*T;
+    }
+    return {level:L, trend:T};
+  }
+
+  /** Weekly seasonal indices (7-period) from history */
+  _seasonalIndices(ys) {
+    const period = 7;
+    const indices = new Array(period).fill(0);
+    const counts  = new Array(period).fill(0);
+    const detrended = ys.map((v,i) => {
+      const {slope,intercept} = this._linReg(ys.slice(Math.max(0,i-7), i+8));
+      const trend = slope*i + intercept;
+      return trend > 0 ? v/trend : 1;
+    });
+    detrended.forEach((v,i)=>{ indices[i%period]+=v; counts[i%period]++; });
+    const raw = indices.map((s,i)=>counts[i]?s/counts[i]:1);
+    const mean = raw.reduce((s,v)=>s+v,0)/period;
+    return raw.map(v => v/mean); // normalised
+  }
+
+  /**
+   * Generate forecast for `horizon` days into the future.
+   * method: 'linear' | 'exponential' | 'seasonal'
+   * Returns { historicalSeries, forecastSeries, upperBand, lowerBand, stats, signals }
+   */
+  forecast(horizon, method='linear') {
+    const hist = this._cashFlows;
+    if (hist.length < 5) return null;
+
+    const nets = hist.map(d => d.net);
+    const hqlas = hist.map(d => d.hqla);
+
+    // Compute residuals std dev for confidence bands
+    const residuals = [];
+    const {slope: s0, intercept: i0} = this._linReg(nets);
+    nets.forEach((v,i) => residuals.push(v - (s0*i + i0)));
+    const stdDev = Math.sqrt(residuals.reduce((s,r)=>s+r*r,0)/residuals.length);
+
+    // Build forecast points
+    const forecastNets  = [];
+    const upperBand     = [];
+    const lowerBand     = [];
+    const forecastHqlas = [];
+
+    if (method === 'linear') {
+      const {slope, intercept} = this._linReg(nets);
+      const hReg = this._linReg(hqlas);
+      const n = nets.length;
+      for (let i=1; i<=horizon; i++) {
+        const fc = slope*(n-1+i) + intercept;
+        const hfc = hReg.slope*(n-1+i) + hReg.intercept;
+        const band = stdDev * Math.sqrt(i) * 1.65; // ~90% CI
+        forecastNets.push(fc);
+        upperBand.push(fc + band);
+        lowerBand.push(fc - band);
+        forecastHqlas.push(Math.max(0, hfc));
+      }
+    } else if (method === 'exponential') {
+      const {level, trend} = this._holtSmooth(nets);
+      const hHolt = this._holtSmooth(hqlas);
+      for (let i=1; i<=horizon; i++) {
+        const fc = level + trend*i;
+        const hfc = hHolt.level + hHolt.trend*i;
+        const band = stdDev * Math.sqrt(i) * 1.65;
+        forecastNets.push(fc);
+        upperBand.push(fc + band);
+        lowerBand.push(fc - band);
+        forecastHqlas.push(Math.max(0, hfc));
+      }
+    } else { // seasonal
+      const sIdx = this._seasonalIndices(nets);
+      const {slope, intercept} = this._linReg(nets);
+      const hReg = this._linReg(hqlas);
+      const n = nets.length;
+      for (let i=1; i<=horizon; i++) {
+        const trendVal = slope*(n-1+i) + intercept;
+        const fc = trendVal * sIdx[(n-1+i) % 7];
+        const hfc = hReg.slope*(n-1+i) + hReg.intercept;
+        const band = stdDev * Math.sqrt(i) * 1.65;
+        forecastNets.push(fc);
+        upperBand.push(fc + band);
+        lowerBand.push(fc - band);
+        forecastHqlas.push(Math.max(0, hfc));
+      }
+    }
+
+    // Summary stats on historical series
+    const avg  = nets.reduce((s,v)=>s+v,0)/nets.length;
+    const min  = Math.min(...nets);
+    const max  = Math.max(...nets);
+    const vol  = stdDev;
+    const trend30 = nets.length>=30 ? nets.slice(-30).reduce((s,v)=>s+v,0)/30 - nets.slice(0,10).reduce((s,v)=>s+v,0)/10 : 0;
+
+    // Signals
+    const endFcHqla   = forecastHqlas[forecastHqlas.length-1];
+    const endFcNet    = forecastNets[forecastNets.length-1];
+    const fAvgNet     = forecastNets.reduce((s,v)=>s+v,0)/forecastNets.length;
+    const negDays     = forecastNets.filter(v=>v<0).length;
+    const minFcNet    = Math.min(...forecastNets);
+    const breachDays  = forecastNets.filter((v,i) => lowerBand[i] < 0).length;
+
+    const signals = [
+      {
+        label: 'Avg Forecast Net Flow',
+        value: fmt(fAvgNet),
+        status: fAvgNet >= 0 ? 'ok' : 'danger',
+        note: fAvgNet >= 0 ? 'Positive net flow expected' : 'Net outflow risk over horizon',
+      },
+      {
+        label: 'Negative Flow Days',
+        value: `${negDays} / ${horizon}d`,
+        status: negDays/horizon < 0.2 ? 'ok' : negDays/horizon < 0.4 ? 'warn' : 'danger',
+        note: `${((negDays/horizon)*100).toFixed(0)}% of forecast days negative`,
+      },
+      {
+        label: 'Minimum Forecast Net',
+        value: fmt(minFcNet),
+        status: minFcNet >= 0 ? 'ok' : minFcNet > -5e6 ? 'warn' : 'danger',
+        note: 'Worst projected single-day net',
+      },
+      {
+        label: 'Confidence Band Breach',
+        value: `${breachDays} days`,
+        status: breachDays === 0 ? 'ok' : breachDays < 5 ? 'warn' : 'danger',
+        note: 'Days where lower CI band goes negative',
+      },
+      {
+        label: 'Forecast HQLA (End)',
+        value: fmt(endFcHqla),
+        status: endFcHqla > 1e8 ? 'ok' : endFcHqla > 5e7 ? 'warn' : 'danger',
+        note: 'Projected HQLA at horizon end',
+      },
+      {
+        label: '30-Day Historical Trend',
+        value: fmt(trend30),
+        status: trend30 >= 0 ? 'ok' : 'warn',
+        note: trend30 >= 0 ? 'Improving historical trend' : 'Declining historical trend',
+      },
+    ];
+
+    const result = {
+      method, horizon,
+      historicalNets:  nets,
+      historicalHqlas: hqlas,
+      historicalDates: hist.map(d=>d.label),
+      forecastNets,   forecastHqlas,
+      upperBand,      lowerBand,
+      stats: { avg, min, max, vol, trend30, count: nets.length },
+      signals,
+      endForecast: { net: forecastNets[forecastNets.length-1], hqla: endFcHqla },
+      avgForecast: { net: fAvgNet },
+    };
+    this._lastForecast = result;
+    return result;
+  }
+
+  get lastForecast() { return this._lastForecast; }
 }
 
 // ═══════════════════════════════════════════════════════════
 //  SAMPLE DATA
 // ═══════════════════════════════════════════════════════════
 const assetArray = new AssetArray();
-
 [
-  { id:'UST-2Y',   name:'US Treasury 2Y',       assetClass:'Gov Bond',    tier:1, notional:42_000_000, adv:980_000_000, bidAsk:0.0002, stressedBidAsk:0.0008 },
-  { id:'UST-10Y',  name:'US Treasury 10Y',       assetClass:'Gov Bond',    tier:1, notional:38_000_000, adv:740_000_000, bidAsk:0.0004, stressedBidAsk:0.0015 },
-  { id:'TBILL-3M', name:'T-Bill 3M',             assetClass:'Gov Bond',    tier:1, notional:25_000_000, adv:500_000_000, bidAsk:0.0001, stressedBidAsk:0.0005 },
-  { id:'SPY',      name:'S&P 500 ETF',           assetClass:'ETF',         tier:2, notional:22_000_000, adv:28_000_000,  bidAsk:0.0005, stressedBidAsk:0.0022 },
-  { id:'AAPL',     name:'Apple Inc',             assetClass:'Large Cap',   tier:2, notional:18_500_000, adv:12_400_000,  bidAsk:0.0010, stressedBidAsk:0.0045 },
-  { id:'MSFT',     name:'Microsoft Corp',        assetClass:'Large Cap',   tier:2, notional:14_200_000, adv: 9_800_000,  bidAsk:0.0012, stressedBidAsk:0.0050 },
-  { id:'QQQ',      name:'Nasdaq 100 ETF',        assetClass:'ETF',         tier:2, notional:11_000_000, adv:18_000_000,  bidAsk:0.0006, stressedBidAsk:0.0025 },
-  { id:'HYG',      name:'HY Corp Bond ETF',      assetClass:'Credit ETF',  tier:3, notional: 9_800_000, adv: 1_200_000,  bidAsk:0.0025, stressedBidAsk:0.0120 },
-  { id:'GS-BOND',  name:'Goldman Sachs 5Y',      assetClass:'Corp Bond',   tier:3, notional: 7_500_000, adv:   480_000,  bidAsk:0.0040, stressedBidAsk:0.0180 },
-  { id:'TSLA',     name:'Tesla Inc',             assetClass:'Mid Cap',     tier:3, notional: 6_200_000, adv: 8_200_000,  bidAsk:0.0018, stressedBidAsk:0.0085 },
-  { id:'JNKFUND',  name:'Junk Bond Fund',        assetClass:'Corp Bond',   tier:3, notional: 5_500_000, adv:   320_000,  bidAsk:0.0055, stressedBidAsk:0.0230 },
-  { id:'EMD',      name:'EM Debt Fund',          assetClass:'EM Bond',     tier:4, notional: 5_100_000, adv:   180_000,  bidAsk:0.0090, stressedBidAsk:0.0380 },
-  { id:'REALTY',   name:'REIT Portfolio',        assetClass:'Real Estate', tier:4, notional: 8_800_000, adv:    60_000,  bidAsk:0.0150, stressedBidAsk:0.0600 },
-  { id:'PE-FUND',  name:'Private Equity Fund',   assetClass:'Illiquid',    tier:4, notional:12_000_000, adv:         0,  bidAsk:0.0250, stressedBidAsk:0.0800 },
+  { id:'UST-2Y',   name:'US Treasury 2Y',      assetClass:'Gov Bond',    tier:1, notional:42_000_000, adv:980_000_000, bidAsk:0.0002, stressedBidAsk:0.0008 },
+  { id:'UST-10Y',  name:'US Treasury 10Y',      assetClass:'Gov Bond',    tier:1, notional:38_000_000, adv:740_000_000, bidAsk:0.0004, stressedBidAsk:0.0015 },
+  { id:'TBILL-3M', name:'T-Bill 3M',            assetClass:'Gov Bond',    tier:1, notional:25_000_000, adv:500_000_000, bidAsk:0.0001, stressedBidAsk:0.0005 },
+  { id:'SPY',      name:'S&P 500 ETF',          assetClass:'ETF',         tier:2, notional:22_000_000, adv:28_000_000,  bidAsk:0.0005, stressedBidAsk:0.0022 },
+  { id:'AAPL',     name:'Apple Inc',            assetClass:'Large Cap',   tier:2, notional:18_500_000, adv:12_400_000,  bidAsk:0.0010, stressedBidAsk:0.0045 },
+  { id:'MSFT',     name:'Microsoft Corp',       assetClass:'Large Cap',   tier:2, notional:14_200_000, adv: 9_800_000,  bidAsk:0.0012, stressedBidAsk:0.0050 },
+  { id:'QQQ',      name:'Nasdaq 100 ETF',       assetClass:'ETF',         tier:2, notional:11_000_000, adv:18_000_000,  bidAsk:0.0006, stressedBidAsk:0.0025 },
+  { id:'HYG',      name:'HY Corp Bond ETF',     assetClass:'Credit ETF',  tier:3, notional: 9_800_000, adv: 1_200_000,  bidAsk:0.0025, stressedBidAsk:0.0120 },
+  { id:'GS-BOND',  name:'Goldman Sachs 5Y',     assetClass:'Corp Bond',   tier:3, notional: 7_500_000, adv:   480_000,  bidAsk:0.0040, stressedBidAsk:0.0180 },
+  { id:'TSLA',     name:'Tesla Inc',            assetClass:'Mid Cap',     tier:3, notional: 6_200_000, adv: 8_200_000,  bidAsk:0.0018, stressedBidAsk:0.0085 },
+  { id:'JNKFUND',  name:'Junk Bond Fund',       assetClass:'Corp Bond',   tier:3, notional: 5_500_000, adv:   320_000,  bidAsk:0.0055, stressedBidAsk:0.0230 },
+  { id:'EMD',      name:'EM Debt Fund',         assetClass:'EM Bond',     tier:4, notional: 5_100_000, adv:   180_000,  bidAsk:0.0090, stressedBidAsk:0.0380 },
+  { id:'REALTY',   name:'REIT Portfolio',       assetClass:'Real Estate', tier:4, notional: 8_800_000, adv:    60_000,  bidAsk:0.0150, stressedBidAsk:0.0600 },
+  { id:'PE-FUND',  name:'Private Equity Fund',  assetClass:'Illiquid',    tier:4, notional:12_000_000, adv:         0,  bidAsk:0.0250, stressedBidAsk:0.0800 },
 ].forEach(d => assetArray.add(new Asset(d)));
 
-const engine = new LiquidityRiskEngine(assetArray);
+const engine         = new LiquidityRiskEngine(assetArray);
+const lcrEngine      = new LCREngine();
+const forecastEngine = new LiquidityForecastEngine();
 
 // ═══════════════════════════════════════════════════════════
 //  UTILITIES
 // ═══════════════════════════════════════════════════════════
 const TIER_COLOR = { 1:'#0d7a4e', 2:'#1d8a3e', 3:'#b25c00', 4:'#b91c1c' };
+const GRID_COLOR = '#e2e5ea';
+const TICK_COLOR = '#6b7585';
+const TICK_FONT  = { family:'IBM Plex Mono', size:9 };
 
 function fmt(n) {
-  if (n === Infinity) return '∞';
-  return new Intl.NumberFormat('en-US',{ style:'currency', currency:'USD', notation:'compact', maximumFractionDigits:1 }).format(n);
+  if (n===Infinity||n===undefined||isNaN(n)) return '∞';
+  return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',notation:'compact',maximumFractionDigits:1}).format(n);
 }
-function fmtPct(n) { return (n * 100).toFixed(3) + '%'; }
-function fmtDays(n) {
-  if (n === Infinity || n > 500) return '∞';
-  if (n < 1) return '<1d';
-  return Math.round(n) + 'd';
+function fmtFull(n) {
+  return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n);
 }
-function el(id) { return document.getElementById(id); }
+function fmtPct(n) { return (n*100).toFixed(3)+'%'; }
+function fmtDays(n){ if(n===Infinity||n>500) return '∞'; if(n<1) return '<1d'; return Math.round(n)+'d'; }
+function el(id)    { return document.getElementById(id); }
+
+// ═══════════════════════════════════════════════════════════
+//  SEED HISTORICAL CASH FLOW DATA (90 days)
+// ═══════════════════════════════════════════════════════════
+(function seedCashFlows() {
+  const base   = { inflow: 8_000_000, outflow: 7_200_000 };
+  const hqla0  = 105_000_000;
+  // Slight upward trend + random noise + a stress dip around day 60
+  for (let i = 89; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const label = `${d.getMonth()+1}/${d.getDate()}`;
+    const trendAdj  = (89-i) * 12_000;                   // gentle upward trend
+    const noise     = (Math.random()-0.5) * 1_800_000;
+    const stressDip = (i < 35 && i > 25) ? -2_500_000 : 0; // stress episode
+    const seasonal  = Math.sin((89-i) * 2*Math.PI/7) * 400_000; // weekly pattern
+    const inflow    = Math.max(0, base.inflow  + trendAdj*0.5 + noise + seasonal);
+    const outflow   = Math.max(0, base.outflow + trendAdj*0.3 - noise*0.6 + stressDip);
+    const net       = inflow - outflow;
+    const hqla      = Math.max(0, hqla0 + trendAdj + noise*2 + stressDip*3);
+    forecastEngine.addObservation({ label, inflow, outflow, net, hqla });
+  }
+})();
+
+// Seed LCR history
+(function seedLCRHistory() {
+  const base = { retail:80_000_000, wholesale:120_000_000, secured:40_000_000, other:20_000_000, inflows:35_000_000 };
+  const jitter = () => 1 + (Math.random()-0.5)*0.18;
+  for (let i=0; i<29; i++) {
+    lcrEngine.compute(assetArray, {
+      retail:    base.retail*jitter(),
+      wholesale: base.wholesale*jitter(),
+      secured:   base.secured*jitter(),
+      other:     base.other*jitter(),
+      inflows:   base.inflows*jitter(),
+    });
+  }
+})();
 
 // ═══════════════════════════════════════════════════════════
 //  CHARTS
 // ═══════════════════════════════════════════════════════════
-let chartSpread, chartClass, chartCost;
-
-const GRID_COLOR  = '#e2e5ea';
-const TICK_COLOR  = '#6b7585';
-const TICK_FONT   = { family: 'IBM Plex Mono', size: 9 };
+let chartSpread, chartClass, chartCost, chartLcrTrend, chartForecast;
+let activeForecastHorizon = 30;
+let activeForecastMethod  = 'linear';
 
 function initCharts() {
   const assets = assetArray.getAll();
 
+  // Spread
   chartSpread = new Chart(el('chart-spread'), {
-    type: 'bar',
-    data: {
-      labels: assets.map(a => a.id),
-      datasets: [
-        { label:'Normal',   data: assets.map(a => a.bidAsk * 100),         backgroundColor:'rgba(29,78,216,.25)', borderColor:'rgba(29,78,216,.6)', borderWidth:1 },
-        { label:'Stressed', data: assets.map(a => a.stressedBidAsk * 100), backgroundColor:'rgba(185,28,28,.25)', borderColor:'rgba(185,28,28,.6)', borderWidth:1 },
+    type:'bar',
+    data:{
+      labels: assets.map(a=>a.id),
+      datasets:[
+        {label:'Normal',   data:assets.map(a=>a.bidAsk*100),         backgroundColor:'rgba(29,78,216,.25)', borderColor:'rgba(29,78,216,.6)', borderWidth:1},
+        {label:'Stressed', data:assets.map(a=>a.stressedBidAsk*100), backgroundColor:'rgba(185,28,28,.25)', borderColor:'rgba(185,28,28,.6)', borderWidth:1},
       ]
     },
-    options: {
-      plugins: { legend: { display: true, labels: { color: TICK_COLOR, font: TICK_FONT, boxWidth: 10 } } },
-      scales: {
-        x: { grid: { color: GRID_COLOR }, ticks: { color: TICK_COLOR, font: TICK_FONT } },
-        y: { grid: { color: GRID_COLOR }, ticks: { color: TICK_COLOR, font: TICK_FONT } }
+    options:{
+      plugins:{legend:{display:true,labels:{color:TICK_COLOR,font:TICK_FONT,boxWidth:10}}},
+      scales:{x:{grid:{color:GRID_COLOR},ticks:{color:TICK_COLOR,font:TICK_FONT}},y:{grid:{color:GRID_COLOR},ticks:{color:TICK_COLOR,font:TICK_FONT}}}
+    }
+  });
+
+  // Class donut
+  const classMap={};
+  assets.forEach(a=>{classMap[a.assetClass]=(classMap[a.assetClass]||0)+a.notional;});
+  const classLabels=Object.keys(classMap);
+  const classColors=['#1d4ed8','#0d7a4e','#b25c00','#b91c1c','#7c3aed','#0891b2','#be185d','#64748b'];
+  chartClass = new Chart(el('chart-class'),{
+    type:'doughnut',
+    data:{labels:classLabels,datasets:[{data:classLabels.map(k=>classMap[k]),backgroundColor:classColors.map(c=>c+'cc'),borderColor:classColors,borderWidth:1}]},
+    options:{plugins:{legend:{display:true,position:'right',labels:{color:TICK_COLOR,font:TICK_FONT,boxWidth:10}}},cutout:'60%'}
+  });
+
+  // Cost bar
+  chartCost = new Chart(el('chart-cost'),{
+    type:'bar',
+    data:{
+      labels:assets.map(a=>a.id),
+      datasets:[{data:assets.map(a=>a.liquidationCost(false)),backgroundColor:assets.map(a=>TIER_COLOR[a.tier]+'55'),borderColor:assets.map(a=>TIER_COLOR[a.tier]),borderWidth:1}]
+    },
+    options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:GRID_COLOR},ticks:{color:TICK_COLOR,font:TICK_FONT}},y:{grid:{color:GRID_COLOR},ticks:{color:TICK_COLOR,font:TICK_FONT}}}}
+  });
+
+  // LCR trend
+  chartLcrTrend = new Chart(el('chart-lcr-trend'),{
+    type:'line',
+    data:{
+      labels:[],
+      datasets:[
+        {label:'LCR %',data:[],borderColor:'#1d4ed8',backgroundColor:'rgba(29,78,216,.08)',borderWidth:2,pointRadius:2,pointBackgroundColor:'#1d4ed8',fill:true,tension:0.3},
+        {label:'100%', data:[],borderColor:'#b91c1c', borderWidth:1.5, borderDash:[5,4],  pointRadius:0, fill:false},
+      ]
+    },
+    options:{
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{color:GRID_COLOR},ticks:{color:TICK_COLOR,font:TICK_FONT,maxTicksLimit:6}},
+        y:{grid:{color:GRID_COLOR},ticks:{color:TICK_COLOR,font:TICK_FONT,callback:v=>v+'%'},suggestedMin:60,suggestedMax:200}
       }
     }
   });
 
-  const classMap = {};
-  assets.forEach(a => { classMap[a.assetClass] = (classMap[a.assetClass] || 0) + a.notional; });
-  const classLabels = Object.keys(classMap);
-  const classColors = ['#1d4ed8','#0d7a4e','#b25c00','#b91c1c','#7c3aed','#0891b2','#be185d','#64748b'];
-
-  chartClass = new Chart(el('chart-class'), {
-    type: 'doughnut',
-    data: {
-      labels: classLabels,
-      datasets: [{ data: classLabels.map(k => classMap[k]), backgroundColor: classColors.map(c => c + 'cc'), borderColor: classColors, borderWidth: 1 }]
+  // Forecast chart
+  chartForecast = new Chart(el('chart-forecast'),{
+    type:'line',
+    data:{
+      labels:[],
+      datasets:[
+        {label:'Historical Net Flow', data:[], borderColor:'#1d4ed8', backgroundColor:'rgba(29,78,216,.06)', borderWidth:2, pointRadius:1.5, fill:true, tension:0.3},
+        {label:'Forecast',            data:[], borderColor:'#6d28d9', backgroundColor:'transparent',         borderWidth:2, pointRadius:2, borderDash:[6,4], fill:false, tension:0.3},
+        {label:'Upper 90% CI',        data:[], borderColor:'transparent', backgroundColor:'rgba(109,40,217,.10)', borderWidth:0, pointRadius:0, fill:'+1', tension:0.3},
+        {label:'Lower 90% CI',        data:[], borderColor:'transparent', backgroundColor:'rgba(109,40,217,.10)', borderWidth:0, pointRadius:0, fill:false, tension:0.3},
+      ]
     },
-    options: {
-      plugins: { legend: { display: true, position: 'right', labels: { color: TICK_COLOR, font: TICK_FONT, boxWidth: 10 } } },
-      cutout: '60%'
-    }
-  });
-
-  chartCost = new Chart(el('chart-cost'), {
-    type: 'bar',
-    data: {
-      labels: assets.map(a => a.id),
-      datasets: [{
-        data: assets.map(a => a.liquidationCost(false)),
-        backgroundColor: assets.map(a => TIER_COLOR[a.tier] + '55'),
-        borderColor:     assets.map(a => TIER_COLOR[a.tier]),
-        borderWidth: 1
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { color: GRID_COLOR }, ticks: { color: TICK_COLOR, font: TICK_FONT } },
-        y: { grid: { color: GRID_COLOR }, ticks: { color: TICK_COLOR, font: TICK_FONT } }
+    options:{
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+      scales:{
+        x:{grid:{color:GRID_COLOR},ticks:{color:TICK_COLOR,font:TICK_FONT,maxTicksLimit:12}},
+        y:{grid:{color:GRID_COLOR},ticks:{color:TICK_COLOR,font:TICK_FONT,callback:v=>fmt(v)}}
       }
     }
   });
 }
 
 function updateCharts(stressed) {
-  const assets = assetArray.getAll();
-  chartCost.data.datasets[0].data = assets.map(a => a.liquidationCost(stressed));
+  const assets=assetArray.getAll();
+  chartCost.data.datasets[0].data=assets.map(a=>a.liquidationCost(stressed));
   chartCost.update();
 }
 
 // ═══════════════════════════════════════════════════════════
-//  RENDER FUNCTIONS
+//  LCR GAUGE
+// ═══════════════════════════════════════════════════════════
+function polarToXY(cx, cy, r, deg) {
+  const rad = (deg-90)*Math.PI/180;
+  return { x: cx+r*Math.cos(rad), y: cy+r*Math.sin(rad) };
+}
+function arcPath(cx, cy, r, s, e) {
+  const p1=polarToXY(cx,cy,r,s), p2=polarToXY(cx,cy,r,e);
+  return `M ${p1.x} ${p1.y} A ${r} ${r} 0 ${(e-s)>180?1:0} 1 ${p2.x} ${p2.y}`;
+}
+function drawGauge(ratio) {
+  const cx=130,cy=130,r=100, START=-140, END=140, MAX=200;
+  const clamp = Math.min(ratio===Infinity?MAX:ratio, MAX);
+  const fillDeg = START + (clamp/MAX)*(END-START);
+  el('lcr-arc-track').setAttribute('d', arcPath(cx,cy,r,START,END));
+  const color = ratio>=150?'#0d7a4e':ratio>=100?'#1d4ed8':'#b91c1c';
+  const fill=el('lcr-arc-fill');
+  fill.setAttribute('d', arcPath(cx,cy,r,START,fillDeg));
+  fill.setAttribute('stroke', color);
+  const t100deg = START+(100/MAX)*(END-START);
+  const inn=polarToXY(cx,cy,r-12,t100deg), out=polarToXY(cx,cy,r+12,t100deg);
+  const tick=el('lcr-tick-100');
+  tick.setAttribute('x1',inn.x); tick.setAttribute('y1',inn.y);
+  tick.setAttribute('x2',out.x); tick.setAttribute('y2',out.y);
+  el('lcr-gauge-val').textContent    = ratio===Infinity?'∞':ratio.toFixed(1)+'%';
+  el('lcr-gauge-val').setAttribute('fill',color);
+  el('lcr-gauge-status').textContent = ratio>=150?'STRONG':ratio>=100?'COMPLIANT':'BREACH';
+  el('lcr-gauge-status').setAttribute('fill',color);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER: LCR
+// ═══════════════════════════════════════════════════════════
+function getLCRParams() {
+  return {
+    retail:    +el('lcr-in-retail').value    || 0,
+    wholesale: +el('lcr-in-wholesale').value || 0,
+    secured:   +el('lcr-in-secured').value   || 0,
+    other:     +el('lcr-in-other').value     || 0,
+    inflows:   +el('lcr-in-inflows').value   || 0,
+  };
+}
+
+function renderLCR() {
+  const r = lcrEngine.compute(assetArray, getLCRParams());
+  const ratioTxt   = r.ratio===Infinity?'∞':r.ratio.toFixed(1)+'%';
+  const ratioColor = r.ratio>=150?'var(--green)':r.ratio>=100?'var(--accent)':'var(--red)';
+  el('lcr-kpi-ratio').textContent = ratioTxt;
+  el('lcr-kpi-ratio').style.color = ratioColor;
+  el('lcr-kpi-hqla').textContent  = fmt(r.totalHQLA);
+  el('lcr-kpi-hqla-sub').textContent = `L1: ${fmt(r.hqlaL1)}  L2A: ${fmt(r.hqlaL2A)}  L2B: ${fmt(r.hqlaL2B)}`;
+  el('lcr-kpi-nco').textContent   = fmt(r.nco);
+  el('lcr-kpi-nco-sub').textContent = `Gross outflows: ${fmt(r.grossOutflows)}`;
+  const surplus = r.surplus;
+  el('lcr-kpi-surplus').textContent = (surplus>=0?'+':'')+fmt(surplus);
+  el('lcr-kpi-surplus').style.color = surplus>=0?'var(--green)':'var(--red)';
+  el('lcr-kpi-surplus-sub').textContent = surplus>=0?'Liquidity buffer available':'Shortfall — action required';
+  const badge=el('lcr-status-badge');
+  if (r.ratio>=150) { badge.textContent='STRONG';    badge.style.background='var(--green-l)'; badge.style.color='var(--green)'; }
+  else if (r.ratio>=100) { badge.textContent='COMPLIANT'; badge.style.background='var(--accent-l)'; badge.style.color='var(--accent)'; }
+  else                   { badge.textContent='BREACH';    badge.style.background='var(--red-l)';    badge.style.color='var(--red)'; }
+  drawGauge(r.ratio);
+
+  // HQLA table
+  el('lcr-hqla-badge').textContent = `${r.items.length} eligible`;
+  el('lcr-hqla-rows').innerHTML = r.items.map(item=>{
+    const haircutPct=(item.haircut*100).toFixed(0)+'%';
+    const level=item.asset.tier===1?'L1':item.asset.tier===2?'L2A':'L2B';
+    return `<div class="hqla-row">
+      <span><span class="tier-badge tier-${item.asset.tier}">${level}</span></span>
+      <span style="font-size:12px">${item.asset.name} <span class="td-muted" style="font-size:10px">${item.asset.id}</span></span>
+      <span class="td-mono" style="text-align:right">${fmt(item.asset.notional)}</span>
+      <span class="td-mono" style="text-align:right;color:${item.haircut>0?'var(--amber)':'var(--muted)'}">${haircutPct}</span>
+      <span class="td-mono" style="text-align:right;color:var(--green)">${fmt(item.hqlaVal)}</span>
+    </div>`;
+  }).join('') || `<div style="color:var(--dim);font-family:var(--mono);font-size:11px;padding:10px 0">No eligible assets</div>`;
+
+  // Outflow bars
+  const maxOut=Math.max(...r.components.map(c=>c.outflow),1);
+  el('lcr-outflow-bars').innerHTML = r.components.map(c=>{
+    const pct=(c.outflow/maxOut*100).toFixed(1);
+    const rc=c.rate>=0.5?'var(--red)':c.rate>=0.2?'var(--amber)':'var(--green)';
+    return `<div class="lcr-comp-row">
+      <span class="lcr-comp-label">${c.label}</span>
+      <div class="lcr-comp-bar-wrap"><div class="progress-wrap"><div class="progress-bar" style="width:${pct}%;background:var(--amber)"></div></div></div>
+      <span class="lcr-comp-amt">${fmt(c.outflow)}</span>
+      <span class="lcr-comp-rate" style="color:${rc}">${(c.rate*100).toFixed(0)}%</span>
+    </div>`;
+  }).join('');
+
+  // LCR trend chart — FIX: single clean label assignment
+  const history = lcrEngine.getHistory();
+  chartLcrTrend.data.labels            = history.map((_,i) => i===history.length-1 ? 'Now' : `-${history.length-1-i}d`);
+  chartLcrTrend.data.datasets[0].data  = history.map(h => h.ratio===Infinity ? 200 : +h.ratio.toFixed(1));
+  chartLcrTrend.data.datasets[1].data  = history.map(() => 100);
+  chartLcrTrend.update();
+
+  engine.log.push('info', `LCR computed — ratio: ${ratioTxt}, HQLA: ${fmt(r.totalHQLA)}, NCO: ${fmt(r.nco)}`);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER: LIQUIDITY FORECAST
+// ═══════════════════════════════════════════════════════════
+function renderForecast() {
+  const horizon = activeForecastHorizon;
+  const method  = activeForecastMethod;
+  const fc = forecastEngine.forecast(horizon, method);
+  if (!fc) {
+    el('fc-signals').innerHTML = `<div style="color:var(--dim);font-family:var(--mono);font-size:11px">Insufficient history. Need at least 5 data points.</div>`;
+    return;
+  }
+
+  // Update chart title
+  const horizonLabel = horizon===30?'30-Day':horizon===90?'90-Day':'1-Year';
+  el('fc-chart-title').textContent = `${horizonLabel} · ${method==='linear'?'Linear Trend':method==='exponential'?'Exp. Smoothing':'Seasonal'}`;
+
+  // Horizon summary cards
+  const fcForHorizon = (h) => {
+    const r = forecastEngine.forecast(h, method);
+    return r ? { net: r.endForecast.net, hqla: r.endForecast.hqla, negDays: r.forecastNets.filter(v=>v<0).length } : null;
+  };
+
+  [[30,'30'],[90,'90'],[365,'365']].forEach(([h,sfx])=>{
+    const r = fcForHorizon(h);
+    if (!r) return;
+    const color = r.net>=0?'var(--green)':r.net>-2e6?'var(--amber)':'var(--red)';
+    const pLabel = h===30?'30-Day':h===90?'90-Day':'1-Year';
+    el(`fc-val-${sfx}`).textContent  = fmt(r.net);
+    el(`fc-val-${sfx}`).style.color  = color;
+    el(`fc-sub-${sfx}`).textContent  = `${r.negDays} negative-flow days · HQLA ${fmt(r.hqla)}`;
+    el(`fc-val-${sfx}`).title = `Projected end-of-${pLabel} net cash flow`;
+  });
+
+  // Build chart data — history + forecast joined with a gap marker
+  const histLabels = fc.historicalDates.slice(-60); // show last 60 days
+  const histData   = fc.historicalNets.slice(-60);
+
+  // Build forecast date labels
+  const today = new Date();
+  const fcLabels = [];
+  for (let i=1; i<=horizon; i++) {
+    const d = new Date(today); d.setDate(d.getDate()+i);
+    if (horizon <= 30)       fcLabels.push(`${d.getMonth()+1}/${d.getDate()}`);
+    else if (horizon <= 90)  fcLabels.push(i%7===1 ? `Wk ${Math.ceil(i/7)}` : '');
+    else                     fcLabels.push(i%30===1 ? `Mo ${Math.ceil(i/30)}` : '');
+  }
+
+  const allLabels  = [...histLabels, ...fcLabels];
+  const histLen    = histLabels.length;
+  const fcLen      = fc.forecastNets.length;
+
+  // Historical dataset (null-pad for forecast zone)
+  const histSet  = [...histData, ...new Array(fcLen).fill(null)];
+  // Forecast dataset (null-pad for history zone)
+  const fcSet    = [...new Array(histLen).fill(null), ...fc.forecastNets];
+  const upperSet = [...new Array(histLen).fill(null), ...fc.upperBand];
+  const lowerSet = [...new Array(histLen).fill(null), ...fc.lowerBand];
+
+  chartForecast.data.labels            = allLabels;
+  chartForecast.data.datasets[0].data  = histSet;
+  chartForecast.data.datasets[1].data  = fcSet;
+  chartForecast.data.datasets[2].data  = upperSet;
+  chartForecast.data.datasets[3].data  = lowerSet;
+  chartForecast.update();
+
+  // Signals
+  const statusColor = {ok:'var(--green)', warn:'var(--amber)', danger:'var(--red)'};
+  const statusBg    = {ok:'var(--green-l)', warn:'var(--amber-l)', danger:'var(--red-l)'};
+  el('fc-signals').innerHTML = fc.signals.map(s=>`
+    <div class="forecast-signal-row">
+      <span class="signal-dot" style="background:${statusColor[s.status]}"></span>
+      <span class="signal-label">${s.label}</span>
+      <span class="signal-val" style="color:${statusColor[s.status]}">${s.value}</span>
+      <span style="font-family:var(--mono);font-size:9px;color:var(--dim);text-align:right;min-width:130px">${s.note}</span>
+    </div>`).join('');
+
+  // Stats grid
+  const stats = fc.stats;
+  const statItems = [
+    {label:'Avg Daily Net Flow', val:fmt(stats.avg),   color:stats.avg>=0?'var(--green)':'var(--red)'},
+    {label:'Min Daily Net Flow', val:fmt(stats.min),   color:stats.min>=0?'var(--muted)':'var(--red)'},
+    {label:'Max Daily Net Flow', val:fmt(stats.max),   color:'var(--green)'},
+    {label:'Daily Volatility',   val:fmt(stats.vol),   color:'var(--amber)'},
+    {label:'Historical Days',    val:`${stats.count}d`,  color:'var(--muted)'},
+    {label:'Forecast Horizon',   val:`${horizon}d`,      color:'var(--accent)'},
+    {label:'Model Method',       val: method==='linear'?'Linear':method==='exponential'?'Exp. Smooth':'Seasonal', color:'var(--purple)'},
+    {label:'30d Trend',          val:fmt(stats.trend30), color:stats.trend30>=0?'var(--green)':'var(--red)'},
+  ];
+  el('fc-stats').innerHTML = statItems.map(s=>`
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:10px 12px">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase">${s.label}</div>
+      <div style="font-family:var(--mono);font-size:14px;font-weight:600;color:${s.color}">${s.val}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER: OVERVIEW
 // ═══════════════════════════════════════════════════════════
 function renderKPIs(stressed) {
-  const total   = assetArray.totalNotional();
-  const liqCost = assetArray.totalLiqCost(stressed);
-  const avgDays = assetArray.avgDaysToLiq(stressed);
-  const t12     = [...assetArray.getByTier(1), ...assetArray.getByTier(2)].reduce((s, a) => s + a.notional, 0);
-
+  const total=assetArray.totalNotional(), liqCost=assetArray.totalLiqCost(stressed);
+  const avgDays=assetArray.avgDaysToLiq(stressed);
+  const t12=[...assetArray.getByTier(1),...assetArray.getByTier(2)].reduce((s,a)=>s+a.notional,0);
   el('kpi-aum').textContent       = fmt(total);
   el('kpi-assets').textContent    = `${assetArray.length} positions`;
   el('kpi-liquid').textContent    = fmt(t12);
-  el('kpi-liquid-pct').textContent= `${(t12 / total * 100).toFixed(1)}% of portfolio`;
+  el('kpi-liquid-pct').textContent= `${(t12/total*100).toFixed(1)}% of portfolio`;
   el('kpi-cost').textContent      = fmt(liqCost);
-  el('kpi-cost-pct').textContent  = `${(liqCost / total * 100).toFixed(3)}% of AUM`;
+  el('kpi-cost-pct').textContent  = `${(liqCost/total*100).toFixed(3)}% of AUM`;
   el('kpi-days').textContent      = fmtDays(avgDays);
   el('kpi-illiquid').textContent  = `${assetArray.getByTier(4).length} illiquid assets`;
-  el('kpi-cost').style.color      = stressed ? 'var(--red)' : 'var(--amber)';
+  el('kpi-cost').style.color      = stressed?'var(--red)':'var(--amber)';
 }
 
 function renderTierAlloc(stressed) {
-  const total = assetArray.totalNotional();
-  const tierLabel = { 1:'Tier 1', 2:'Tier 2', 3:'Tier 3', 4:'Tier 4' };
-  el('tier-alloc').innerHTML = [1,2,3,4].map(t => {
-    const sum = assetArray.getByTier(t).reduce((s, a) => s + a.notional, 0);
-    const pct = (sum / total * 100).toFixed(1);
+  const total=assetArray.totalNotional();
+  el('tier-alloc').innerHTML=[1,2,3,4].map(t=>{
+    const sum=assetArray.getByTier(t).reduce((s,a)=>s+a.notional,0);
+    const pct=(sum/total*100).toFixed(1);
     return `<div class="tier-row">
-      <span class="tier-label-cell" style="color:${TIER_COLOR[t]}">${tierLabel[t]}</span>
-      <div class="tier-bar-wrap">
-        <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%;background:${TIER_COLOR[t]}"></div></div>
-      </div>
-      <span class="tier-pct">${pct}%</span>
-      <span class="tier-amt">${fmt(sum)}</span>
+      <span class="tier-label-cell" style="color:${TIER_COLOR[t]}">Tier ${t}</span>
+      <div class="tier-bar-wrap"><div class="progress-wrap"><div class="progress-bar" style="width:${pct}%;background:${TIER_COLOR[t]}"></div></div></div>
+      <span class="tier-pct">${pct}%</span><span class="tier-amt">${fmt(sum)}</span>
     </div>`;
   }).join('');
 }
 
 function renderPortfolioTable(stressed) {
-  const assets = assetArray.sortByTierAndADV();
-  el('portfolio-count').textContent = `${assets.length} assets`;
-  const statusLabel = { ok:'Liquid', warn:'Moderate', breach:'Illiquid' };
-  el('portfolio-tbody').innerHTML = assets.map(a => {
-    const status = a.riskStatus(stressed);
+  const assets=assetArray.sortByTierAndADV();
+  el('portfolio-count').textContent=`${assets.length} assets`;
+  const statusLabel={ok:'Liquid',warn:'Moderate',breach:'Illiquid'};
+  el('portfolio-tbody').innerHTML=assets.map(a=>{
+    const status=a.riskStatus(stressed);
     return `<tr>
       <td class="td-mono" style="color:var(--accent)">${a.id}</td>
-      <td>${a.name}</td>
-      <td class="td-muted">${a.assetClass}</td>
+      <td>${a.name}</td><td class="td-muted">${a.assetClass}</td>
       <td><span class="tier-badge tier-${a.tier}">T${a.tier}</span></td>
       <td class="td-mono">${fmt(a.notional)}</td>
-      <td class="td-mono td-muted">${a.adv > 0 ? fmt(a.adv) + '/d' : '—'}</td>
-      <td class="td-mono" style="color:${stressed ? 'var(--red)' : 'var(--muted)'}">${fmtPct(a.effectiveSpread(stressed))}</td>
-      <td class="td-mono" style="color:${a.liquidationCost(stressed) > 500_000 ? 'var(--amber)' : 'var(--muted)'}">${fmt(a.liquidationCost(stressed))}</td>
+      <td class="td-mono td-muted">${a.adv>0?fmt(a.adv)+'/d':'—'}</td>
+      <td class="td-mono" style="color:${stressed?'var(--red)':'var(--muted)'}">${fmtPct(a.effectiveSpread(stressed))}</td>
+      <td class="td-mono" style="color:${a.liquidationCost(stressed)>500_000?'var(--amber)':'var(--muted)'}">${fmt(a.liquidationCost(stressed))}</td>
       <td class="td-mono" style="color:${TIER_COLOR[a.tier]}">${fmtDays(a.daysToLiquidate(stressed))}</td>
       <td><span class="status-badge status-${status}">${statusLabel[status]}</span></td>
     </tr>`;
@@ -1065,146 +1420,132 @@ function renderPortfolioTable(stressed) {
 }
 
 function renderTargetAmt() {
-  const pct   = +el('target-range').value;
-  const total = assetArray.totalNotional();
-  el('target-pct').textContent = pct;
-  el('target-amt').textContent = fmt(total * pct / 100);
+  const pct=+el('target-range').value, total=assetArray.totalNotional();
+  el('target-pct').textContent=pct; el('target-amt').textContent=fmt(total*pct/100);
 }
 
 function renderSimResult(result) {
-  el('sim-results').style.display = 'flex';
-  el('res-count').textContent = result.sold.length;
-  el('res-fees').textContent  = fmt(result.totalFees);
-  el('res-days').textContent  = fmtDays(result.maxDays);
-
-  const sf = result.shortfall;
-  el('res-shortfall').textContent = sf > 0 ? fmt(sf) : 'NONE';
-  el('res-shortfall').style.color = sf > 0 ? 'var(--red)' : 'var(--green)';
-
-  el('waterfall-rows').innerHTML = result.sold.map((item, i) => `
+  el('sim-results').style.display='flex';
+  el('res-count').textContent=result.sold.length;
+  el('res-fees').textContent=fmt(result.totalFees);
+  el('res-days').textContent=fmtDays(result.maxDays);
+  const sf=result.shortfall;
+  el('res-shortfall').textContent=sf>0?fmt(sf):'NONE';
+  el('res-shortfall').style.color=sf>0?'var(--red)':'var(--green)';
+  el('waterfall-rows').innerHTML=result.sold.map((item,i)=>`
     <div class="wf-row">
-      <span class="td-mono" style="color:var(--dim)">${i + 1}</span>
+      <span class="td-mono" style="color:var(--dim)">${i+1}</span>
       <span class="td-mono" style="color:var(--accent)">${item.asset.id}</span>
       <span style="color:var(--muted);font-size:11px">${item.asset.name}</span>
       <span class="td-mono">${fmt(item.sellAmt)}</span>
-      <span class="td-mono" style="color:${item.fee > 200_000 ? 'var(--amber)' : 'var(--muted)'}">${fmt(item.fee)}</span>
+      <span class="td-mono" style="color:${item.fee>200_000?'var(--amber)':'var(--muted)'}">${fmt(item.fee)}</span>
       <span><span class="tier-badge tier-${item.asset.tier}">T${item.asset.tier}</span></span>
     </div>`).join('');
 }
 
 function renderQueueViewer() {
-  const q    = engine.queue;
-  const snap = q.toArray();
-  el('queue-size-badge').textContent = `SIZE: ${q.size}`;
-  el('q-size').textContent     = q.size;
-  el('q-peek').textContent     = q.peek() ? q.peek().id : '—';
-  el('q-dequeued').textContent = q.totalDequeued;
-
-  if (snap.length === 0 && q.totalDequeued === 0) {
-    el('queue-vis').innerHTML = `<span style="color:var(--dim);font-family:var(--mono);font-size:11px">Queue empty — run simulation to populate</span>`;
+  const q=engine.queue, snap=q.toArray();
+  el('queue-size-badge').textContent=`SIZE: ${q.size}`;
+  el('q-size').textContent=q.size; el('q-peek').textContent=q.peek()?q.peek().id:'—'; el('q-dequeued').textContent=q.totalDequeued;
+  if(snap.length===0 && q.totalDequeued===0) {
+    el('queue-vis').innerHTML=`<span style="color:var(--dim);font-family:var(--mono);font-size:11px">Queue empty — run simulation to populate</span>`;
     return;
   }
-  el('queue-vis').innerHTML = snap.map((a, i) =>
-    `<span class="queue-node${i === 0 ? ' processing' : ''}" style="border-color:${TIER_COLOR[a.tier]}70;color:${TIER_COLOR[a.tier]}">${a.id}</span>`
+  el('queue-vis').innerHTML=snap.map((a,i)=>
+    `<span class="queue-node${i===0?' processing':''}" style="border-color:${TIER_COLOR[a.tier]}70;color:${TIER_COLOR[a.tier]}">${a.id}</span>`
   ).join('<span class="queue-arrow">›</span>')
-  || `<span style="color:var(--dim);font-family:var(--mono);font-size:11px">Queue exhausted (${q.totalDequeued} assets dequeued)</span>`;
+  ||`<span style="color:var(--dim);font-family:var(--mono);font-size:11px">Queue exhausted (${q.totalDequeued} dequeued)</span>`;
 }
 
 function renderLog() {
-  const entries = engine.log.toArray();
-  el('log-count').textContent = `${entries.length} entries`;
-  if (!entries.length) {
-    el('log-container').innerHTML = `<div style="color:var(--dim);font-family:var(--mono);font-size:11px;padding:8px 0">No events yet. Run the simulation.</div>`;
-    return;
-  }
-  const typeClass = { info:'log-info', ok:'log-ok', warn:'log-warn', danger:'log-danger' };
-  const html = entries.map((e, i) => `
+  const entries=engine.log.toArray();
+  el('log-count').textContent=`${entries.length} entries`;
+  if(!entries.length){el('log-container').innerHTML=`<div style="color:var(--dim);font-family:var(--mono);font-size:11px;padding:8px 0">No events yet.</div>`;return;}
+  const typeClass={info:'log-info',ok:'log-ok',warn:'log-warn',danger:'log-danger'};
+  const c=el('log-container');
+  c.innerHTML=entries.map((e,i)=>`
     <div class="log-entry">
-      <span class="log-idx">${String(i).padStart(3, '0')}</span>
+      <span class="log-idx">${String(i).padStart(3,'0')}</span>
       <span class="log-dot ${typeClass[e.type]}">●</span>
-      <span class="log-msg ${e.type !== 'info' ? 'bright' : ''}">${e.message}</span>
+      <span class="log-msg ${e.type!=='info'?'bright':''}">${e.message}</span>
     </div>`).join('');
-  const c = el('log-container');
-  c.innerHTML = html;
-  c.scrollTop = c.scrollHeight;
+  c.scrollTop=c.scrollHeight;
 }
 
 // ═══════════════════════════════════════════════════════════
 //  EVENT HANDLERS
 // ═══════════════════════════════════════════════════════════
-document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     item.classList.add('active');
-    el('view-' + item.dataset.view).classList.add('active');
-    if (item.dataset.view === 'log')   renderLog();
-    if (item.dataset.view === 'queue') renderQueueViewer();
+    el('view-'+item.dataset.view).classList.add('active');
+    if(item.dataset.view==='log')      renderLog();
+    if(item.dataset.view==='queue')    renderQueueViewer();
+    if(item.dataset.view==='lcr')      renderLCR();
+    if(item.dataset.view==='forecast') renderForecast();
   });
 });
 
-el('stress-toggle').addEventListener('change', e => {
-  const s = e.target.checked;
+el('stress-toggle').addEventListener('change',e=>{
+  const s=e.target.checked;
   engine.setStress(s);
-  el('stress-label').textContent = s ? 'STRESS' : 'NORMAL';
-  el('stress-label').className   = 'stress-label-txt' + (s ? ' stress-active' : '');
-  el('stress-indicator').style.background = s ? '#dc2626' : '#34d399';
+  el('stress-label').textContent=s?'STRESS':'NORMAL';
+  el('stress-label').className='stress-label-txt'+(s?' stress-active':'');
+  el('stress-indicator').style.background=s?'#dc2626':'#34d399';
   renderAll(s);
 });
 
-el('target-range').addEventListener('input', () => {
-  renderTargetAmt();
-  el('sim-results').style.display = 'none';
+el('target-range').addEventListener('input',()=>{ renderTargetAmt(); el('sim-results').style.display='none'; });
+
+el('btn-run').addEventListener('click',()=>{
+  const pct=+el('target-range').value;
+  el('btn-run').disabled=true; el('btn-run').textContent='RUNNING…';
+  setTimeout(()=>{
+    const result=engine.simulate(pct);
+    renderSimResult(result); renderQueueViewer(); renderLog();
+    el('btn-run').disabled=false; el('btn-run').textContent='▶ RUN SIMULATION';
+  },300);
 });
 
-el('btn-run').addEventListener('click', () => {
-  const pct = +el('target-range').value;
-  el('btn-run').disabled = true;
-  el('btn-run').textContent = 'RUNNING…';
-  setTimeout(() => {
-    const result = engine.simulate(pct);
-    renderSimResult(result);
-    renderQueueViewer();
-    renderLog();
-    el('btn-run').disabled = false;
-    el('btn-run').textContent = '▶ RUN SIMULATION';
-  }, 300);
-});
+el('btn-reset').addEventListener('click',()=>{ engine.queue.clear(); el('sim-results').style.display='none'; renderQueueViewer(); });
+el('lcr-btn-calc').addEventListener('click', renderLCR);
+el('btn-clear-log').addEventListener('click',()=>{ engine.log.clear(); renderLog(); });
 
-el('btn-reset').addEventListener('click', () => {
-  engine.queue.clear();
-  el('sim-results').style.display = 'none';
-  renderQueueViewer();
+// Forecast tab and method controls
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeForecastHorizon=+btn.dataset.horizon;
+    renderForecast();
+  });
 });
+el('fc-method').addEventListener('change',e=>{ activeForecastMethod=e.target.value; renderForecast(); });
+el('fc-btn-run').addEventListener('click', renderForecast);
 
-el('btn-clear-log').addEventListener('click', () => {
-  engine.log.clear();
-  renderLog();
-});
-
-function updateClock() {
-  el('clock').textContent = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
-}
-setInterval(updateClock, 1000);
-updateClock();
+// Clock
+function updateClock(){ el('clock').textContent=new Date().toISOString().replace('T',' ').substring(0,19)+' UTC'; }
+setInterval(updateClock,1000); updateClock();
 
 // ═══════════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════════
 function renderAll(stressed) {
-  renderKPIs(stressed);
-  renderTierAlloc(stressed);
-  renderPortfolioTable(stressed);
-  renderTargetAmt();
-  updateCharts(stressed);
+  renderKPIs(stressed); renderTierAlloc(stressed);
+  renderPortfolioTable(stressed); renderTargetAmt(); updateCharts(stressed);
 }
 
-engine.log.push('info', 'LiquidityRiskEngine initialized');
-engine.log.push('info', `AssetArray loaded: ${assetArray.length} positions, AUM: ${fmt(assetArray.totalNotional())}`);
-engine.log.push('info', 'LiquidationQueue ready (size: 0, dequeued: 0)');
+engine.log.push('info','LiquidityRiskEngine initialized');
+engine.log.push('info',`AssetArray loaded: ${assetArray.length} positions, AUM: ${fmt(assetArray.totalNotional())}`);
+engine.log.push('info','LiquidationQueue ready (size: 0, dequeued: 0)');
+engine.log.push('info',`ForecastEngine seeded: ${forecastEngine.getHistory().length} days of cash flow history`);
 
 initCharts();
 renderAll(false);
+renderLCR();
+renderForecast();
 </script>
 </body>
 </html>
