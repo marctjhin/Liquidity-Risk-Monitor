@@ -180,6 +180,34 @@
   .queue-stat-label { font-family: var(--mono); font-size: 9px; color: var(--muted); margin-bottom: 5px; letter-spacing: .08em; }
   .queue-stat-val { font-family: var(--mono); font-size: 18px; font-weight: 600; }
 
+  /* LCR GAUGE */
+  .lcr-gauge-wrap { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; }
+  .lcr-gauge-svg { overflow: visible; }
+  .lcr-gauge-value { font-family: var(--mono); font-size: 32px; font-weight: 600; text-anchor: middle; }
+  .lcr-gauge-label { font-family: var(--mono); font-size: 10px; text-anchor: middle; letter-spacing: .08em; }
+  .lcr-gauge-status { font-family: var(--mono); font-size: 11px; font-weight: 600; text-anchor: middle; letter-spacing: .06em; }
+
+  /* LCR HQLA TABLE */
+  .hqla-row { display: grid; grid-template-columns: 28px 1fr 90px 90px 90px; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .hqla-row:last-child { border-bottom: none; }
+  .hqla-header { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: .09em; }
+
+  /* LCR INPUT FIELDS */
+  .lcr-input-group { display: flex; flex-direction: column; gap: 5px; }
+  .lcr-input-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: .09em; text-transform: uppercase; }
+  .lcr-input { font-family: var(--mono); font-size: 12px; color: var(--text); background: var(--bg); border: 1px solid var(--border2); border-radius: 4px; padding: 7px 10px; width: 100%; outline: none; transition: border-color .14s; }
+  .lcr-input:focus { border-color: var(--accent); }
+
+  /* LCR COMPONENT BARS */
+  .lcr-comp-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .lcr-comp-label { font-family: var(--mono); font-size: 10px; color: var(--muted); width: 130px; flex-shrink: 0; }
+  .lcr-comp-bar-wrap { flex: 1; }
+  .lcr-comp-amt { font-family: var(--mono); font-size: 10px; color: var(--muted); width: 62px; text-align: right; flex-shrink: 0; }
+  .lcr-comp-rate { font-family: var(--mono); font-size: 10px; width: 40px; text-align: right; flex-shrink: 0; }
+
+  /* LCR TREND CHART */
+  .lcr-threshold-line { stroke: var(--red); stroke-dasharray: 4 3; stroke-width: 1.5; }
+
   /* ANIMATIONS */
   @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
   .anim { animation: fadeUp .3s ease forwards; }
@@ -213,6 +241,7 @@
     <div class="nav-label">MONITOR</div>
     <div class="nav-item active" data-view="overview"><span class="nav-icon">◈</span> Overview</div>
     <div class="nav-item" data-view="portfolio"><span class="nav-icon">▤</span> Portfolio</div>
+    <div class="nav-item" data-view="lcr"><span class="nav-icon">⬡</span> LCR Monitor</div>
     <div class="nav-label">SIMULATION</div>
     <div class="nav-item" data-view="simulate"><span class="nav-icon">▶</span> Liquidation Sim</div>
     <div class="nav-item" data-view="queue"><span class="nav-icon">⊞</span> Queue Viewer</div>
@@ -396,6 +425,131 @@
       </div>
     </section>
 
+    <!-- ══════════ VIEW: LCR ══════════ -->
+    <section class="view" id="view-lcr">
+
+      <!-- KPI row -->
+      <div class="kpi-grid">
+        <div class="kpi-card accent-blue anim anim-delay-1">
+          <div class="kpi-label">LCR Ratio</div>
+          <div class="kpi-value" id="lcr-kpi-ratio" style="color:var(--accent)">—</div>
+          <div class="kpi-sub">Min. required: 100%</div>
+        </div>
+        <div class="kpi-card accent-green anim anim-delay-2">
+          <div class="kpi-label">Total HQLA</div>
+          <div class="kpi-value" id="lcr-kpi-hqla" style="color:var(--green)">—</div>
+          <div class="kpi-sub" id="lcr-kpi-hqla-sub">After haircuts applied</div>
+        </div>
+        <div class="kpi-card accent-amber anim anim-delay-3">
+          <div class="kpi-label">Net Cash Outflows (30d)</div>
+          <div class="kpi-value" id="lcr-kpi-nco" style="color:var(--amber)">—</div>
+          <div class="kpi-sub" id="lcr-kpi-nco-sub">Stressed 30-day window</div>
+        </div>
+        <div class="kpi-card accent-red anim anim-delay-4">
+          <div class="kpi-label">Surplus / Deficit</div>
+          <div class="kpi-value" id="lcr-kpi-surplus">—</div>
+          <div class="kpi-sub" id="lcr-kpi-surplus-sub">vs 100% requirement</div>
+        </div>
+      </div>
+
+      <!-- Gauge + Outflow Inputs -->
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">LCR Gauge</span>
+            <span class="panel-badge" id="lcr-status-badge" style="background:var(--accent-l);color:var(--accent)">COMPUTING</span>
+          </div>
+          <div class="panel-body">
+            <div class="lcr-gauge-wrap">
+              <svg class="lcr-gauge-svg" width="260" height="150" viewBox="0 0 260 150">
+                <!-- track arc -->
+                <path id="lcr-arc-track" d="" fill="none" stroke="#e2e5ea" stroke-width="16" stroke-linecap="round"/>
+                <!-- fill arc -->
+                <path id="lcr-arc-fill"  d="" fill="none" stroke="#1d4ed8" stroke-width="16" stroke-linecap="round"/>
+                <!-- 100% threshold tick -->
+                <line id="lcr-tick-100" x1="0" y1="0" x2="0" y2="0" stroke="#b91c1c" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- labels -->
+                <text x="24"  y="148" font-family="IBM Plex Mono" font-size="9" fill="#b0b8c5">0%</text>
+                <text x="224" y="148" font-family="IBM Plex Mono" font-size="9" fill="#b0b8c5">200%</text>
+                <text x="122" y="28"  font-family="IBM Plex Mono" font-size="9" fill="#b91c1c" text-anchor="middle">100%</text>
+                <text class="lcr-gauge-value" id="lcr-gauge-val"    x="130" y="112" fill="#1c2330">—</text>
+                <text class="lcr-gauge-status" id="lcr-gauge-status" x="130" y="132" fill="#6b7585">—</text>
+              </svg>
+            </div>
+            <div style="display:flex;justify-content:center;gap:20px;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px">
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:3px;background:#1d4ed8;display:inline-block;border-radius:2px"></span>LCR Fill</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:2px;background:#b91c1c;display:inline-block;border-radius:2px"></span>Min Threshold</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Cash Outflow Assumptions (30-Day)</span></div>
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="lcr-input-group">
+                <div class="lcr-input-label">Retail Deposits ($)</div>
+                <input class="lcr-input" id="lcr-in-retail" type="number" value="80000000" step="1000000"/>
+              </div>
+              <div class="lcr-input-group">
+                <div class="lcr-input-label">Wholesale Funding ($)</div>
+                <input class="lcr-input" id="lcr-in-wholesale" type="number" value="120000000" step="1000000"/>
+              </div>
+              <div class="lcr-input-group">
+                <div class="lcr-input-label">Secured Funding ($)</div>
+                <input class="lcr-input" id="lcr-in-secured" type="number" value="40000000" step="1000000"/>
+              </div>
+              <div class="lcr-input-group">
+                <div class="lcr-input-label">Derivatives / Other ($)</div>
+                <input class="lcr-input" id="lcr-in-other" type="number" value="20000000" step="1000000"/>
+              </div>
+              <div class="lcr-input-group">
+                <div class="lcr-input-label">Cash Inflows ($)</div>
+                <input class="lcr-input" id="lcr-in-inflows" type="number" value="35000000" step="1000000"/>
+              </div>
+              <div class="lcr-input-group" style="align-self:end">
+                <button class="btn btn-primary" id="lcr-btn-calc" style="width:100%">↻ RECALCULATE</button>
+              </div>
+            </div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--dim);line-height:1.7;border-top:1px solid var(--border);padding-top:10px">
+              Basel III run-off rates applied: retail 5% · wholesale 25% · secured 15% · other 100%<br>
+              Net outflow = max(gross outflow − inflows, 25% gross outflow)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HQLA Breakdown + Component Bars -->
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">HQLA Breakdown — Portfolio Assets</span>
+            <span class="panel-badge" style="background:var(--green-l);color:var(--green)" id="lcr-hqla-badge">0 eligible</span>
+          </div>
+          <div class="panel-body" style="padding:0">
+            <div style="padding:12px 16px 0">
+              <div class="hqla-row hqla-header">
+                <span>T</span><span>Asset</span><span style="text-align:right">Notional</span><span style="text-align:right">Haircut</span><span style="text-align:right">HQLA Value</span>
+              </div>
+            </div>
+            <div id="lcr-hqla-rows" style="padding:0 16px 12px;max-height:280px;overflow-y:auto"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Outflow Component Breakdown</span></div>
+          <div class="panel-body" id="lcr-outflow-bars"></div>
+          <div class="panel-header" style="border-top:1px solid var(--border);border-bottom:none;margin-top:4px">
+            <span class="panel-title">30-Day LCR Trend</span>
+          </div>
+          <div class="panel-body">
+            <div class="chart-wrap" style="height:140px"><canvas id="chart-lcr-trend"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
     <!-- ══════════ VIEW: LOG ══════════ -->
     <section class="view" id="view-log">
       <div class="panel">
@@ -566,7 +720,113 @@ class EventLog {
 }
 
 /**
- * LiquidityRiskEngine — orchestrates simulation.
+ * LCREngine — Basel III Liquidity Coverage Ratio calculator.
+ * OOP: encapsulates HQLA computation, haircut tables, and outflow modelling.
+ * Uses an internal Array to store HQLA line items and history snapshots.
+ */
+class LCREngine {
+  constructor() {
+    // HQLA haircut schedule per Basel III (% retained after haircut)
+    this.HAIRCUT = {
+      1: 1.00,  // Level 1 — 0% haircut (T1 assets)
+      2: 0.85,  // Level 2A — 15% haircut (T2 assets)
+      3: 0.50,  // Level 2B — 50% haircut (T3 assets, partial)
+      4: 0.00,  // Ineligible (T4)
+    };
+
+    // Basel III run-off rates
+    this.RUNOFF = {
+      retail:    0.05,
+      wholesale: 0.25,
+      secured:   0.15,
+      other:     1.00,
+    };
+
+    this._hqlaItems  = []; // Array of HQLA eligible line items
+    this._history    = []; // Array of historical LCR snapshots (last 30 days)
+    this._lastResult = null;
+  }
+
+  /** Compute HQLA value for a given asset */
+  hqlaValue(asset) {
+    const haircut = this.HAIRCUT[asset.tier];
+    return asset.notional * haircut;
+  }
+
+  /** True if asset is HQLA-eligible */
+  isHQLAEligible(asset) {
+    return asset.tier <= 3;
+  }
+
+  /**
+   * Compute LCR given portfolio and outflow assumptions.
+   * Results stored in internal Arrays for display and history.
+   */
+  compute(assetArray, params) {
+    const { retail, wholesale, secured, other, inflows } = params;
+
+    // Build HQLA items Array from eligible assets
+    this._hqlaItems = [];
+    assetArray.getAll().forEach(a => {
+      if (!this.isHQLAEligible(a)) return;
+      const haircut   = 1 - this.HAIRCUT[a.tier];
+      const hqlaVal   = this.hqlaValue(a);
+      this._hqlaItems.push({ asset: a, haircut, hqlaVal });
+    });
+
+    // Sum HQLA by level
+    const hqlaL1  = this._hqlaItems.filter(i => i.asset.tier === 1).reduce((s, i) => s + i.hqlaVal, 0);
+    const hqlaL2A = this._hqlaItems.filter(i => i.asset.tier === 2).reduce((s, i) => s + i.hqlaVal, 0);
+    const hqlaL2B = this._hqlaItems.filter(i => i.asset.tier === 3).reduce((s, i) => s + i.hqlaVal, 0);
+
+    // Basel III caps: L2 assets ≤ 40% of HQLA; L2B ≤ 15%
+    const totalRaw   = hqlaL1 + hqlaL2A + hqlaL2B;
+    const capL2      = Math.min(hqlaL2A + hqlaL2B, 0.40 * totalRaw);
+    const capL2B     = Math.min(hqlaL2B, 0.15 * totalRaw);
+    const totalHQLA  = hqlaL1 + Math.min(hqlaL2A, capL2 - capL2B) + capL2B;
+
+    // Gross outflows
+    const grossRetail    = retail    * this.RUNOFF.retail;
+    const grossWholesale = wholesale * this.RUNOFF.wholesale;
+    const grossSecured   = secured   * this.RUNOFF.secured;
+    const grossOther     = other     * this.RUNOFF.other;
+    const grossOutflows  = grossRetail + grossWholesale + grossSecured + grossOther;
+
+    // Net cash outflows = max(gross − inflows, 25% of gross)
+    const nco = Math.max(grossOutflows - inflows, 0.25 * grossOutflows);
+
+    const ratio    = nco > 0 ? (totalHQLA / nco) * 100 : Infinity;
+    const surplus  = totalHQLA - nco;
+    const compliant = ratio >= 100;
+
+    const result = {
+      ratio, totalHQLA, nco, surplus, compliant,
+      hqlaL1, hqlaL2A, hqlaL2B,
+      grossOutflows, inflows,
+      components: [
+        { label: 'Retail Run-off',    gross: retail,    outflow: grossRetail,    rate: this.RUNOFF.retail },
+        { label: 'Wholesale Run-off', gross: wholesale, outflow: grossWholesale, rate: this.RUNOFF.wholesale },
+        { label: 'Secured Funding',   gross: secured,   outflow: grossSecured,   rate: this.RUNOFF.secured },
+        { label: 'Derivatives/Other', gross: other,     outflow: grossOther,     rate: this.RUNOFF.other },
+      ],
+      items: [...this._hqlaItems],
+      timestamp: new Date(),
+    };
+
+    // Push snapshot to history Array
+    this._history.push({ ratio, totalHQLA, nco, ts: result.timestamp });
+    if (this._history.length > 30) this._history.shift();
+
+    this._lastResult = result;
+    return result;
+  }
+
+  getHistory() { return [...this._history]; }
+  getItems()   { return [...this._hqlaItems]; }
+  get lastResult() { return this._lastResult; }
+}
+
+
  * OOP: owns the portfolio, queue, and log; exposes domain methods.
  */
 class LiquidityRiskEngine {
